@@ -81,9 +81,19 @@ afterEvaluate {
     signing {
         val key = providers.gradleProperty("signingKey").orNull
         val password = providers.gradleProperty("signingPassword").orNull
-        if (key != null && password != null) {
-            useInMemoryPgpKeys(key, password)
-            sign(publishing.publications["release"])
+        val useGpg = providers.gradleProperty("signingUseGpgCmd").orNull == "true"
+        when {
+            // CI 用：把私钥塞进属性，不依赖本机 gpg
+            key != null && password != null -> {
+                useInMemoryPgpKeys(key, password)
+                sign(publishing.publications["release"])
+            }
+            // 本地用：直接调 gpg，口令由 gpg-agent 弹窗，私钥不出 ~/.gnupg
+            useGpg -> {
+                useGpgCmd()
+                sign(publishing.publications["release"])
+            }
+            else -> Unit
         }
     }
 }
