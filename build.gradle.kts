@@ -121,3 +121,30 @@ tasks.register("publishToGithub") {
         }
     }
 }
+
+/**
+ * 生成带 GPG 签名的 Maven Central 仓库。
+ *
+ * Central Portal 不接受直接推送，需要上传一个仓库 bundle，所以先生成到
+ * `build/central-repo`，再由 `bundleForCentral` 打成 zip。
+ * 没有配置 signingKey / signingPassword 时不签名，这个任务只用于本地验证。
+ */
+tasks.register("publishToCentral") {
+    group = "publishing"
+    description = "生成 Maven Central 仓库（build/central-repo，有密钥时带签名）"
+    dependsOn(
+        ":omui-core:publishAllPublicationsToCentralRepoRepository",
+        ":omui-icons:publishAllPublicationsToCentralRepoRepository",
+        ":omui-components:publishAllPublicationsToCentralRepoRepository",
+        ":omui-test:publishAllPublicationsToCentralRepoRepository",
+    )
+}
+
+tasks.register<org.gradle.api.tasks.bundling.Zip>("bundleForCentral") {
+    group = "publishing"
+    description = "把 build/central-repo 打成可上传到 Central Portal 的 zip"
+    dependsOn("publishToCentral")
+    archiveFileName.set("openmetroui-${providers.gradleProperty("OM_VERSION").get()}.zip")
+    destinationDirectory.set(layout.buildDirectory.dir("central-bundle"))
+    from(layout.buildDirectory.dir("central-repo"))
+}

@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
     `maven-publish`
+    `signing`
 }
 
 android {
@@ -44,17 +45,23 @@ dependencies {
     api(project(":omui-icons"))
 }
 
+val javadocJar = tasks.register<Jar>("javadocJar") {
+    archiveClassifier.set("javadoc")
+    from(layout.buildDirectory.dir("empty-javadoc"))
+}
+
 afterEvaluate {
     publishing {
         publications {
             register<MavenPublication>("release") {
                 from(components["release"])
+                artifact(javadocJar)
                 groupId = providers.gradleProperty("OM_GROUP").get()
                 artifactId = "omui-components"
                 version = providers.gradleProperty("OM_VERSION").get()
                 pom {
                     name.set("OpenMetroUI Components")
-                    description.set("Metro × Swiss 设计语言的 37 个组件")
+                    description.set("Metro × Swiss 设计语言的 38 个组件")
                 }
             }
         }
@@ -64,6 +71,19 @@ afterEvaluate {
                 name = "dist"
                 url = uri(rootProject.file("dist/maven"))
             }
+            maven {
+                name = "centralRepo"
+                url = uri(rootProject.layout.buildDirectory.dir("central-repo"))
+            }
+        }
+    }
+
+    signing {
+        val key = providers.gradleProperty("signingKey").orNull
+        val password = providers.gradleProperty("signingPassword").orNull
+        if (key != null && password != null) {
+            useInMemoryPgpKeys(key, password)
+            sign(publishing.publications["release"])
         }
     }
 }

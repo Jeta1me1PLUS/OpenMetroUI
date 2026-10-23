@@ -5,6 +5,7 @@ plugins {
     // AGP 9 内置 Kotlin，无需 org.jetbrains.kotlin.android；Compose 编译器仍需该插件。
     alias(libs.plugins.kotlin.compose)
     `maven-publish`
+    `signing`
 }
 
 android {
@@ -54,11 +55,19 @@ dependencies {
     testImplementation(libs.junit)
 }
 
+// Maven Central 要求每个 artifact 都带 javadoc。Android 库没有 javadoc，
+// 用一个空的 jar 占位，Portal 校验只检查存在性。
+val javadocJar = tasks.register<Jar>("javadocJar") {
+    archiveClassifier.set("javadoc")
+    from(layout.buildDirectory.dir("empty-javadoc"))
+}
+
 afterEvaluate {
     publishing {
         publications {
             register<MavenPublication>("release") {
                 from(components["release"])
+                artifact(javadocJar)
                 groupId = providers.gradleProperty("OM_GROUP").get()
                 artifactId = "omui-core"
                 version = providers.gradleProperty("OM_VERSION").get()
@@ -75,6 +84,21 @@ afterEvaluate {
                 name = "dist"
                 url = uri(rootProject.file("dist/maven"))
             }
+            // Central Portal 需要上传一个仓库 bundle，所以先生成到本地目录
+            maven {
+                name = "centralRepo"
+                url = uri(rootProject.layout.buildDirectory.dir("central-repo"))
+            }
+        }
+    }
+
+    // 没有密钥时就跳过签名，本地构建与 dist 发布照常
+    signing {
+        val key = providers.gradleProperty("signingKey").orNull
+        val password = providers.gradleProperty("signingPassword").orNull
+        if (key != null && password != null) {
+            useInMemoryPgpKeys(key, password)
+            sign(publishing.publications["release"])
         }
     }
 }
