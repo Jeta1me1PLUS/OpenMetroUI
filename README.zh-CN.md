@@ -47,7 +47,7 @@ Metro 和瑞士国际主义有共同的底子：扁平、无衬线、网格、�
 implementation("io.github.jeta1me1plus:omui-components:0.10.10")
 ```
 
-不需要额外仓库配置。`0.10.10` 正在提交到 Maven Central，如果暂时解析不到，用下面任意一种方式。
+不需要额外仓库配置。已用只配 `mavenCentral()` 的消费者验证过，能正常解析。
 
 ### 2.2 GitHub Packages
 

@@ -47,7 +47,7 @@ Spectrum tiles are opt-in. The eight hues share fixed lightness and chroma in OK
 implementation("io.github.jeta1me1plus:omui-components:0.10.10")
 ```
 
-No extra repository config. `0.10.10` is being submitted to Maven Central; if it does not resolve yet, use one of the options below.
+No extra repository config needed. Verified by resolving the published artifact with `mavenCentral()` only.
 
 ### 2.2 GitHub Packages
 
