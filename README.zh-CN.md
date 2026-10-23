@@ -16,7 +16,7 @@
   </tr>
 </table>
 
-46 个组件，已在真机走查。要求 minSdk 24、Compose 1.11.4 以上。
+53 个组件，已在真机走查。要求 minSdk 24、Compose 1.11.4 以上。
 
 ---
 
@@ -130,10 +130,10 @@ setContent {
 | 布局 | `OmScreen` `OmSection` `OmGrid` `Modifier.omGridSpan` |
 | 导航 | `OmTopBar` `OmCollapsingTopBar` `OmPivot` `OmBottomBar` `OmRail` `OmDrawer` |
 | 磁贴 | `OmTile` `OmTileGrid` |
-| 内容 | `OmCard` `OmList` `OmListItem` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmAccordion` `OmPager` `OmPagerIndicator` `OmStat` `OmSparkline` `OmTable` |
-| 输入 | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` `OmSegmentedControl` `OmStepperInput` `OmDropdown` `OmDatePicker` |
-| 反馈 | `OmProgressBar` `OmProgressRing` `OmSkeleton` `OmSnackbar` |
-| 浮层 | `OmDialog` `OmSheet` |
+| 内容 | `OmCard` `OmList` `OmListItem` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmErrorState` `OmAccordion` `OmPager` `OmPagerIndicator` `OmStat` `OmSparkline` `OmTable` `OmSwipeToDismiss` |
+| 输入 | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` `OmSegmentedControl` `OmStepperInput` `OmDropdown` `OmDatePicker` `OmOtpInput` |
+| 反馈 | `OmProgressBar` `OmProgressRing` `OmSkeleton` `OmSnackbar` `OmBanner` |
+| 浮层 | `OmDialog` `OmSheet` `OmSideSheet` `OmMenu` |
 | 原语 | `Modifier.omClickable` `Modifier.omFocusRing` |
 
 ### 4.1 按钮
@@ -387,6 +387,45 @@ OmMenu(
 }
 ```
 
+
+### 4.10 布局与补充
+
+<img src="images/17-staggered.png" width="240" />
+<img src="images/18-otp.png" width="240" />
+<img src="images/19-banner.png" width="240" />
+
+```kotlin
+OmBanner(
+    text = "配置已更新，将在下次启动时生效。",
+    actionLabel = "重启",
+    onAction = { },
+    onDismiss = { },
+)
+OmBanner(text = "无法连接到服务器。", tone = OmBannerTone.Error)
+
+OmErrorState(title = "加载失败", description = "检查一下网络连接。") {
+    OmButton("重试", onClick = { })
+}
+
+OmOtpInput(value = code, onValueChange = { code = it }, length = 6)
+
+OmSwipeToDismiss(onDismiss = { }) {
+    OmListItem(title = "向左滑动删除", onClick = { })
+}
+
+OmStaggeredGrid(columns = 2) {
+    OmTile("A", Modifier.height(80.dp))
+    OmTile("B", Modifier.height(120.dp))
+}
+
+OmResponsivePane(
+    list = { /* 列表栏 */ },
+    detail = { /* 宽度 >= 840dp 时显示 */ },
+)
+
+OmSideSheet(visible = open, onDismiss = { open = false }) { /* 内容 */ }
+```
+
 ---
 
 ## 5. 主题
@@ -469,7 +508,7 @@ fun `配色符合规范`() {
 
 ```text
 omui-core/         token、主题、交互原语、栅格布局
-omui-components/   46 个组件
+omui-components/   53 个组件
 omui-icons/        13 个几何图标
 omui-test/         OmCheck 设计约束校验
 sample/            五页 demo

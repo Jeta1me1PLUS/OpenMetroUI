@@ -1,5 +1,12 @@
 package io.openmetro.sample
 
+import io.openmetro.ui.component.feedback.OmBanner
+import io.openmetro.ui.component.feedback.OmBannerTone
+import io.openmetro.ui.component.content.OmErrorState
+import io.openmetro.ui.component.input.OmOtpInput
+import io.openmetro.ui.component.content.OmSwipeToDismiss
+import io.openmetro.ui.component.content.OmStaggeredGrid
+import io.openmetro.ui.component.overlay.OmSideSheet
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import io.openmetro.ui.component.content.OmStat
@@ -108,6 +115,9 @@ fun GalleryScreen() {
     var date by remember { mutableStateOf<OmDate?>(null) }
     var menuOpen by remember { mutableStateOf(false) }
     val density = LocalDensity.current
+    var otp by remember { mutableStateOf("") }
+    var sideSheetVisible by remember { mutableStateOf(false) }
+    var bannerVisible by remember { mutableStateOf(true) }
     var drawerVisible by remember { mutableStateOf(false) }
     var railIndex by remember { mutableIntStateOf(0) }
 
@@ -331,6 +341,16 @@ fun GalleryScreen() {
         }
     }
 
+    OmSection(label = "STAGGERED / 瀑布流") {
+        SubTitle("按最短列填充")
+        OmStaggeredGrid(columns = 2, gutter = spacing.space2) {
+            GridBlock("A", Modifier.fillMaxWidth().height(80.dp))
+            GridBlock("B", Modifier.fillMaxWidth().height(120.dp))
+            GridBlock("C", Modifier.fillMaxWidth().height(64.dp))
+            GridBlock("D", Modifier.fillMaxWidth().height(96.dp))
+        }
+    }
+
     OmSection(label = "LIST / 列表") {
         SubTitle("两级文本 + 尾随图标")
         val rows = listOf(
@@ -362,6 +382,15 @@ fun GalleryScreen() {
         )
         Spacer(Modifier.height(spacing.space2))
         OmListItem(title = "禁用项", subtitle = "不可点，文字降为 38%", enabled = false)
+
+        SubTitle("左滑删除")
+        OmSwipeToDismiss(onDismiss = {}) {
+            OmListItem(
+                title = "向左滑动露出删除区",
+                subtitle = "拖过 60% 触发，否则回弹",
+                onClick = {},
+            )
+        }
     }
 
     OmSection(label = "TILE / 磁贴") {
@@ -494,6 +523,9 @@ fun GalleryScreen() {
 
         SubTitle("Date")
         OmDatePicker(selected = date, onSelect = { date = it })
+
+        SubTitle("OTP")
+        OmOtpInput(value = otp, onValueChange = { otp = it })
     }
 
     OmSection(label = "DATA / 数据") {
@@ -610,6 +642,31 @@ fun GalleryScreen() {
             OmButton("新建", {})
         }
 
+        SubTitle("Banner")
+        if (bannerVisible) {
+            OmBanner(
+                text = "配置已更新，将在下次启动时生效。",
+                actionLabel = "重启",
+                onAction = {},
+                onDismiss = { bannerVisible = false },
+            )
+        }
+        Spacer(Modifier.height(spacing.space2))
+        OmBanner(
+            text = "无法连接到服务器，请检查网络。",
+            tone = OmBannerTone.Error,
+            actionLabel = "重试",
+            onAction = {},
+        )
+
+        SubTitle("Error state")
+        OmErrorState(
+            title = "加载失败",
+            description = "断开的十字表示中断，方块是断点本身。",
+        ) {
+            OmButton("重试", {})
+        }
+
         Spacer(Modifier.height(spacing.space4))
         OmSnackbar(
             visible = snackbarVisible,
@@ -688,17 +745,45 @@ fun GalleryScreen() {
     }
 
     OmSection(label = "OVERLAY / 浮层") {
-        Row(horizontalArrangement = Arrangement.spacedBy(spacing.space2)) {
-            OmButton("DIALOG", { dialogVisible = true })
+        OmGrid(columns = 4, gutter = spacing.space2) {
+            OmButton(
+                text = "DIALOG",
+                onClick = { dialogVisible = true },
+                modifier = Modifier.omGridSpan(2),
+                fillWidth = true,
+            )
             OmButton(
                 text = "SHEET",
                 onClick = { sheetVisible = true },
+                modifier = Modifier.omGridSpan(2),
                 variant = OmButtonVariant.Outlined,
+                fillWidth = true,
             )
             OmButton(
                 text = "DRAWER",
                 onClick = { drawerVisible = true },
+                modifier = Modifier.omGridSpan(2),
                 variant = OmButtonVariant.Outlined,
+                fillWidth = true,
+            )
+            OmButton(
+                text = "SIDE",
+                onClick = { sideSheetVisible = true },
+                modifier = Modifier.omGridSpan(2),
+                variant = OmButtonVariant.Outlined,
+                fillWidth = true,
+            )
+        }
+    }
+
+    if (sideSheetVisible) {
+        OmSideSheet(visible = sideSheetVisible, onDismiss = { sideSheetVisible = false }) {
+            OmText("侧边面板", style = typography.displayM)
+            Spacer(Modifier.height(spacing.space4))
+            OmText(
+                "从 end 侧滑出，与 Drawer 对称。",
+                style = typography.bodyM,
+                color = colors.textSecondary,
             )
         }
     }

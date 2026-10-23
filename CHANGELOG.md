@@ -2,6 +2,29 @@
 
 按版本倒序，只列改了什么。
 
+## v0.13.0 · 2026-10-23
+
+交互与布局两批一起做，总数 46 → 53。
+
+### 新增
+
+- `OmBanner`：通栏提示，左侧 4dp 色条，Info / Error 两档。底色只做极淡叠加，不抢内容。
+- `OmErrorState`：与 `OmEmptyState` 同骨架，图形换成断开的十字 + danger 色断点。
+- `OmOtpInput`：一个透明 `BasicTextField` 覆盖在 N 个方格上，不逐格建输入框。
+- `OmSwipeToDismiss`：左滑露出 96dp 删除区，拖过 60% 触发。
+- `OmStaggeredGrid`：按当前最短列填充，列宽固定、高度独立。
+- `OmResponsivePane`：宽度 ≥840dp 时列表与详情并排，否则只显示列表。
+- `OmSideSheet`：从 end 侧滑出，与 `OmDrawer` 对称。
+
+### 修复
+
+- demo 的 OVERLAY 区四个按钮挤在一排，最后一个被挤出屏幕；改成 2×2 网格。
+
+### 未验证
+
+- `OmSideSheet` 的真机滑入方向（截图时未捕获到面板）
+- `OmSwipeToDismiss` 与纵向滚动的冲突
+
 ## v0.12.0 · 2026-10-23
 
 新增数据展示与上下文菜单，总数 42 → 46。

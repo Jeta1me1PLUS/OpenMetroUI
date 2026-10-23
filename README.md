@@ -16,7 +16,7 @@ A Jetpack Compose UI library that fuses **Metro tiles** with **Swiss Internation
   </tr>
 </table>
 
-46 components, verified on device. Requires minSdk 24 and Compose 1.11.4+.
+53 components, verified on device. Requires minSdk 24 and Compose 1.11.4+.
 
 ---
 
@@ -130,10 +130,10 @@ Three rules:
 | Layout | `OmScreen` `OmSection` `OmGrid` `Modifier.omGridSpan` |
 | Navigation | `OmTopBar` `OmCollapsingTopBar` `OmPivot` `OmBottomBar` `OmRail` `OmDrawer` |
 | Tiles | `OmTile` `OmTileGrid` |
-| Content | `OmCard` `OmList` `OmListItem` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmAccordion` `OmPager` `OmPagerIndicator` `OmStat` `OmSparkline` `OmTable` |
-| Inputs | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` `OmSegmentedControl` `OmStepperInput` `OmDropdown` `OmDatePicker` |
-| Feedback | `OmProgressBar` `OmProgressRing` `OmSkeleton` `OmSnackbar` |
-| Overlays | `OmDialog` `OmSheet` |
+| Content | `OmCard` `OmList` `OmListItem` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmErrorState` `OmAccordion` `OmPager` `OmPagerIndicator` `OmStat` `OmSparkline` `OmTable` `OmSwipeToDismiss` |
+| Inputs | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` `OmSegmentedControl` `OmStepperInput` `OmDropdown` `OmDatePicker` `OmOtpInput` |
+| Feedback | `OmProgressBar` `OmProgressRing` `OmSkeleton` `OmSnackbar` `OmBanner` |
+| Overlays | `OmDialog` `OmSheet` `OmSideSheet` `OmMenu` |
 | Primitives | `Modifier.omClickable` `Modifier.omFocusRing` |
 
 ### 4.1 Buttons
@@ -387,6 +387,45 @@ OmMenu(
 }
 ```
 
+
+### 4.10 Layout and extras
+
+<img src="images/17-staggered.png" width="240" />
+<img src="images/18-otp.png" width="240" />
+<img src="images/19-banner.png" width="240" />
+
+```kotlin
+OmBanner(
+    text = "Config updated.",
+    actionLabel = "Restart",
+    onAction = { },
+    onDismiss = { },
+)
+OmBanner(text = "Cannot reach the server.", tone = OmBannerTone.Error)
+
+OmErrorState(title = "Load failed", description = "Check your connection.") {
+    OmButton("Retry", onClick = { })
+}
+
+OmOtpInput(value = code, onValueChange = { code = it }, length = 6)
+
+OmSwipeToDismiss(onDismiss = { }) {
+    OmListItem(title = "Swipe left to delete", onClick = { })
+}
+
+OmStaggeredGrid(columns = 2) {
+    OmTile("A", Modifier.height(80.dp))
+    OmTile("B", Modifier.height(120.dp))
+}
+
+OmResponsivePane(
+    list = { /* list column */ },
+    detail = { /* shown when width >= 840dp */ },
+)
+
+OmSideSheet(visible = open, onDismiss = { open = false }) { /* content */ }
+```
+
 ---
 
 ## 5. Theming
@@ -469,7 +508,7 @@ A prebuilt APK is attached to each [release](https://github.com/Jeta1me1PLUS/Ope
 
 ```text
 omui-core/         tokens, theme, interaction primitives, grid layout
-omui-components/   46 components
+omui-components/   53 components
 omui-icons/        13 geometric icons
 omui-test/         OmCheck design-spec validation
 sample/            five-page demo
