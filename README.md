@@ -4,49 +4,52 @@
 ![minSdk](https://img.shields.io/badge/minSdk-24-black.svg)
 ![Compose](https://img.shields.io/badge/Compose-1.11.4-4285F4.svg)
 
-融合 Metro 动态磁贴与瑞士国际主义排版的 Android Compose UI 库。直角、无阴影、单一强调色、4dp 网格。
+**English** · [简体中文](README.zh-CN.md)
+
+A Jetpack Compose UI library that fuses **Metro tiles** with **Swiss International Typographic Style**. Square corners, no shadows, one accent color, 4dp grid.
 
 <table>
   <tr>
-    <td align="center"><img src="images/01-news-light.png" width="200" /><br/><sub>Paper · 资讯流</sub></td>
-    <td align="center"><img src="images/02-news-dark.png" width="200" /><br/><sub>Ink · 深色</sub></td>
-    <td align="center"><img src="images/03-lab.png" width="200" /><br/><sub>Lab · 实时调参</sub></td>
-    <td align="center"><img src="images/04-gallery.png" width="200" /><br/><sub>组件画廊</sub></td>
+    <td align="center"><img src="images/01-news-light.png" width="200" /><br/><sub>Paper · feed</sub></td>
+    <td align="center"><img src="images/02-news-dark.png" width="200" /><br/><sub>Ink · dark</sub></td>
+    <td align="center"><img src="images/03-lab.png" width="200" /><br/><sub>Lab · live tokens</sub></td>
   </tr>
 </table>
 
-当前版本 0.10.10，38 个组件可用，已在真机走查。
+38 components, verified on device. Requires minSdk 24 and Compose 1.11.4+.
 
-## 设计思路
+---
 
-Metro 和瑞士国际主义是两条独立的源流，但底子是同一套：扁平、无衬线、网格、靠字号建立层级、拒绝装饰。差别只在表达方式。Metro 用高饱和色块和动效说"这里能点"，瑞士用留白和极端的字号跨度说"这里重要"。
+## 1. Why another UI library
 
-这个库让两者分工：**结构交给瑞士，色块和触感交给 Metro。**
+Metro and Swiss Style share a foundation: flat, sans-serif, grid-driven, hierarchy by type size, no ornament. They differ in expression. Metro uses saturated blocks and motion to say *this is tappable*. Swiss uses white space and extreme type contrast to say *this matters*.
 
-具体落到四条硬约束上：
+This library splits the work: **structure from Swiss, blocks and touch from Metro.**
 
-| 约束 | 为什么 |
+| Constraint | Reason |
 |---|---|
-| 圆角恒为 0 | 两派都是直角。圆角会削弱块面的几何稳定性，也让层级变得模糊 |
-| 没有阴影 | 层级只由底色明度和字号建立。投影、渐变、模糊一律不用 |
-| 只有一个强调色 | 保留 Metro 的色块节奏，但色块必须在瑞士的色彩纪律里活动 |
-| 动效白名单 | 只允许位移、淡入、色块揭示、磁贴翻转、颜色过渡。没有弹簧和回弹 |
+| Zero corner radius | Both movements are orthogonal. Rounded corners weaken the geometric stability of a block |
+| No shadows | Hierarchy comes from surface luminance and type size only |
+| One accent color | Keeps Metro's color rhythm inside Swiss color discipline |
+| Motion whitelist | Only translation, fade, block reveal, tile flip, color transition. No springs, no bounce |
 
-排版不做等比模数。UI 段用约 1.2 的压缩阶梯，展示段直接跳到 1.33 倍。层级靠跨度拉开，不靠均匀梯度。所有行高都是 4sp 的整数倍，保证多列并排时基线对齐。
+Type does not follow a geometric scale. UI sizes step by ~1.2, display sizes jump 1.33×. Hierarchy comes from the jump, not from an even gradient. Every line height is a multiple of 4sp so multi-column baselines align.
 
-多色磁贴是 opt-in 的。八色在 OKLCH 里固定明度和彩度，只变色相，所以看起来有色彩但不花。默认仍是单色相。
+Spectrum tiles are opt-in. The eight hues share fixed lightness and chroma in OKLCH and vary only in hue, so the result is colorful but not noisy. The default remains monochrome.
 
-## 安装
+---
 
-**Maven Central**
+## 2. Installation
+
+### 2.1 Maven Central
 
 ```kotlin
 implementation("io.github.jeta1me1plus:omui-components:0.10.10")
 ```
 
-不需要额外仓库配置。`0.10.10` 正在提交到 Maven Central，同步完成后这行就能直接解析。如果暂时拿不到，用下面两种方式之一。
+No extra repository config. `0.10.10` is being submitted to Maven Central; if it does not resolve yet, use one of the options below.
 
-**GitHub Packages**
+### 2.2 GitHub Packages
 
 ```kotlin
 // settings.gradle.kts
@@ -61,16 +64,11 @@ repositories {
         }
     }
 }
-
-// app/build.gradle.kts
-implementation("io.github.jeta1me1plus:omui-components:0.10.10")
 ```
 
-包是 public，但 GitHub Packages 拉取仍然要 token（`read:packages` 权限）。
+The package is public, but GitHub Packages still requires a token with `read:packages`.
 
-**本地仓库**
-
-运行下面的命令，会在项目根目录生成 `dist/`，它是一个可以直接拷走的 Maven 仓库：
+### 2.3 Local repository
 
 ```bash
 ./gradlew publishToDist
@@ -82,9 +80,20 @@ repositories {
 }
 ```
 
-要求 minSdk 24、Compose 1.11.4 以上。只依赖 `compose.runtime / ui / foundation / animation`，不带 Material3。不要和 Material3 混用，圆角、阴影、按压反馈会互相打架。
+### 2.4 Requirements
 
-## 快速开始
+| Item | Value |
+|---|---|
+| minSdk | 24 |
+| Compose | 1.11.4+ |
+| Dependencies | `compose.runtime / ui / foundation / animation` only |
+| Not included | Material3, Material Icons, DI frameworks, annotation processors |
+
+**Do not mix with Material3.** Corner radius, elevation, ripple feedback and color semantics will fight each other.
+
+---
+
+## 3. Quick start
 
 ```kotlin
 setContent {
@@ -92,186 +101,73 @@ setContent {
         OmScreen(scrollable = true) {
             Spacer(Modifier.height(32.dp))
             OmTopBar(
-                title = "标题",
-                label = "SECTION",
+                title = "Morning Brief",
+                label = "TODAY",
                 onBack = { },
-                actions = { OmIconButton(OmIcons.Search, "搜索") { } },
+                actions = { OmIconButton(OmIcons.Search, "Search") { } },
             )
             Spacer(Modifier.height(24.dp))
-            OmButton("开始", onClick = { })
+            OmButton("Start", onClick = { })
         }
     }
 }
 ```
 
-三件事需要遵守：
+Three rules:
 
-1. `OmTheme` 放在最外层，所有 token 从它的 CompositionLocal 读取。
-2. 页边距、滚动、系统栏都交给 `OmScreen`，不要在外面再套 padding。
-3. 组件参数传语义（`variant`、`tone`、`size`），传 Color 或 TextStyle 会绕过规范。
+1. `OmTheme` must be the outermost composable. Every token is read from its CompositionLocals.
+2. Page margins, scrolling and system bars belong to `OmScreen`. Don't wrap it in your own padding.
+3. Pass semantic parameters (`variant`, `tone`, `size`). Passing raw `Color` or `TextStyle` bypasses the spec.
 
-## 组件用法
+---
 
-### 文本与基础
+## 4. Components
 
-```kotlin
-OmText("正文", style = OmTheme.typography.bodyL)
-OmText("次要信息", style = OmTheme.typography.caption, color = OmTheme.colors.textSecondary)
+| Category | APIs |
+|---|---|
+| Foundation | `OmText` `OmSurface` `OmDivider` `OmIcon` |
+| Buttons | `OmButton` `OmIconButton` |
+| Layout | `OmScreen` `OmSection` `OmGrid` `Modifier.omGridSpan` |
+| Navigation | `OmTopBar` `OmCollapsingTopBar` `OmPivot` `OmBottomBar` `OmRail` `OmDrawer` |
+| Tiles | `OmTile` `OmTileGrid` |
+| Content | `OmCard` `OmList` `OmListItem` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmAccordion` `OmPager` `OmPagerIndicator` |
+| Inputs | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` |
+| Feedback | `OmProgressBar` `OmProgressRing` `OmSkeleton` `OmSnackbar` |
+| Overlays | `OmDialog` `OmSheet` |
+| Primitives | `Modifier.omClickable` `Modifier.omFocusRing` |
 
-OmDivider()                                  // 1dp 分隔线
-OmDivider(strong = true, insetStart = 16.dp)  // 2dp 结构线，左侧缩进
+### 4.1 Buttons
 
-OmIcon(OmIcons.Check, contentDescription = "完成", size = 24.dp)
+Five variants, three sizes, 48dp touch target regardless of visual height. Pressing darkens the surface by 8% — there is no ripple.
 
-OmSurface(color = OmTheme.colors.surfaceVariant) {
-    OmText("带底色的区域")
-}
-```
-
-`OmText` 只接受字阶 token，不接受任意 `TextStyle` 构造。`OmIcon` 的 tint 默认跟随 `textPrimary`。
-
-### 按钮
-
-```kotlin
-OmButton("保存", onClick = { })                                          // accent 填充
-OmButton("取消", onClick = { }, variant = OmButtonVariant.Outlined)
-OmButton("次要", onClick = { }, variant = OmButtonVariant.FilledInk)     // 反白块
-OmButton("文字", onClick = { }, variant = OmButtonVariant.Text)
-OmButton("删除", onClick = { }, variant = OmButtonVariant.Destructive)
-OmButton("提交", onClick = { }, size = OmButtonSize.Large, fillWidth = true)
-OmButton("继续", onClick = { }, leadingIcon = OmIcons.ArrowForward)
-
-OmIconButton(OmIcons.Search, "搜索") { }
-OmIconButton(OmIcons.Close, "删除", onClick = { }, tint = OmTheme.colors.danger)
-```
-
-视觉高度 32 / 40 / 48dp，触摸区统一 48dp。按压是底色明度下沉，不是水波纹。
-
-### 布局
+<img src="images/04-buttons.png" width="240" />
 
 ```kotlin
-OmScreen(scrollable = true) {
-    OmSection(label = "TODAY / 今日", title = "大标题") {
-        OmText("区块内容")
-    }
-}
+OmButton("Save", onClick = { })                                        // accent fill
+OmButton("Cancel", onClick = { }, variant = OmButtonVariant.Outlined)
+OmButton("Secondary", onClick = { }, variant = OmButtonVariant.FilledInk)
+OmButton("Plain", onClick = { }, variant = OmButtonVariant.Text)
+OmButton("Delete", onClick = { }, variant = OmButtonVariant.Destructive)
+OmButton("Submit", onClick = { }, size = OmButtonSize.Large, fillWidth = true)
+OmButton("Next", onClick = { }, leadingIcon = OmIcons.ArrowForward)
 
-// 栏网格，子项按跨栏定位
-OmGrid(columns = 4, gutter = 8.dp) {
-    OmCard(Modifier.omGridSpan(2)) { OmText("占两栏") }
-    OmCard(Modifier.omGridSpan(4)) { OmText("整行") }
-    OmCard(Modifier.omGridSpan(2, offset = 2)) { OmText("从第 3 栏开始") }
-}
+OmIconButton(OmIcons.Search, "Search") { }
+OmIconButton(OmIcons.Close, "Delete", onClick = { }, tint = OmTheme.colors.danger)
 ```
 
-`OmScreen` 负责页边距、正文最大宽度、系统栏内边距和整页滚动。骨架外层已经处理过 insets 时传 `applyInsets = false`。
+### 4.2 Inputs
 
-### 导航
+Labels sit above the field and never float. The underline slot is always 2dp, so switching from 1dp to 2dp on focus does not shift layout.
 
-```kotlin
-// 页头
-OmTopBar(title = "设置", large = false, onBack = { })
-OmTopBar(
-    title = "晨间简报",
-    label = "TODAY",
-    actions = {
-        OmIconButton(OmIcons.Search, "搜索") { }
-        OmIconButton(OmIcons.MoreVert, "更多") { }
-    },
-)
-
-// 随滚动收缩的页头，需要把同一个 scrollState 交给滚动内容
-val scrollState = rememberScrollState()
-OmCollapsingTopBar(title = "晨间简报", scrollState = scrollState)
-
-// 横向页签
-OmPivot(
-    tabs = listOf("全部", "科技", "设计"),
-    selectedIndex = tab,
-    onSelect = { tab = it },
-)
-
-// 底部导航，3 到 5 项
-OmBottomBar(
-    items = listOf(
-        OmBottomBarItem("NEWS", OmIcons.Article),
-        OmBottomBarItem("LAB", OmIcons.Beaker),
-    ),
-    selectedIndex = page,
-    onSelect = { page = it },
-)
-
-// 大屏侧边导航
-OmRail(items = items, selectedIndex = page, onSelect = { page = it })
-
-// 抽屉
-OmDrawer(visible = open, onDismiss = { open = false }) {
-    OmListItem("导航项", onClick = { })
-}
-```
-
-### 磁贴
-
-```kotlin
-OmTileGrid(columns = 4, gutter = 8.dp) {
-    OmTile(
-        title = "收件箱",
-        modifier = Modifier.omGridSpan(2).aspectRatio(1f),
-        label = "3 条新消息",
-        tone = OmTileTone.Accent,
-    )
-    OmTile(
-        title = "设计周报",
-        modifier = Modifier.omGridSpan(2).aspectRatio(1f),
-        tone = OmTileTone.Paper,
-        backTitle = "本周 8 篇，已读 3 篇",
-    )
-    OmTile(
-        title = "阅读清单",
-        modifier = Modifier.omGridSpan(4).aspectRatio(2f),
-        tone = OmTileTone.Ink,
-        onClick = { },
-    )
-}
-```
-
-颜色由 `tone` 声明，不传色值。切到 Spectrum 模式时四个 tone 会自动映射到八色相。尺寸由跨栏和宽高比决定，组件不自己算。`backTitle` 非空时点击翻面，背面必须是信息而不是动画。
-
-### 列表与卡片
-
-```kotlin
-OmCard(variant = OmCardVariant.Flat) {
-    OmText("卡片标题", style = OmTheme.typography.title)
-    OmText("内容")
-}
-
-OmList(
-    items = listOf("第一项", "第二项", "第三项"),
-    insetStart = 16.dp,
-) { item ->
-    OmListItem(
-        title = item,
-        subtitle = "次要说明",
-        trailing = { OmIcon(OmIcons.ChevronEnd, null) },
-        onClick = { },
-    )
-}
-
-OmListItem(title = "选中项", selected = true, onClick = { })
-OmListItem(title = "禁用项", enabled = false)
-```
-
-`OmList` 负责在项之间插入分隔线，最后一项不画。手工用 `Column` 组合时要自己加 `OmDivider`。
-
-### 输入
+<img src="images/05-input.png" width="240" />
 
 ```kotlin
 OmTextField(
     value = email,
     onValueChange = { email = it },
-    label = "EMAIL / 邮箱",
+    label = "EMAIL",
     placeholder = "name@example.com",
-    helperText = "会发送验证链接",
+    helperText = "A reset link will be sent here",
     leadingIcon = OmIcons.Search,
 )
 
@@ -283,99 +179,165 @@ OmTextField(
     minLines = 3,
 )
 
-OmTextField(value = "错误内容", onValueChange = {}, errorText = "格式不正确")
-
+OmTextField(value = value, onValueChange = {}, errorText = "Invalid format")
 OmSearchField(value = query, onValueChange = { query = it })
+```
 
-OmCheckbox(checked = agree, onCheckedChange = { agree = it }, label = "同意条款")
-OmRadio(selected = choice == 1, onClick = { choice = 1 }, label = "选项一")
+### 4.3 Lists and cards
+
+`OmList` inserts hairlines between items and skips the last one. Selection is a 3dp accent bar drawn behind the row, so it never shifts the text.
+
+<img src="images/06-list.png" width="240" />
+<img src="images/08-cards.png" width="240" />
+
+```kotlin
+OmList(items = rows, insetStart = 16.dp) { row ->
+    OmListItem(
+        title = row.title,
+        subtitle = row.subtitle,
+        trailing = { OmIcon(OmIcons.ChevronEnd, null) },
+        onClick = { },
+    )
+}
+
+OmListItem(title = "Selected", selected = true, onClick = { })
+
+OmCard(variant = OmCardVariant.Outlined) {
+    OmText("Card title", style = OmTheme.typography.title)
+    OmText("Body copy")
+}
+```
+
+### 4.4 Tiles
+
+Tiles never take a color directly, only a `tone`. Switching to Spectrum remaps all tones to the eight-hue palette without touching call sites. Size comes from grid span and aspect ratio — the component does not compute its own size.
+
+<img src="images/07-tiles.png" width="240" />
+
+```kotlin
+OmTileGrid(columns = 4, gutter = 8.dp) {
+    OmTile(
+        title = "Inbox",
+        modifier = Modifier.omGridSpan(2).aspectRatio(1f),
+        label = "3 new",
+        tone = OmTileTone.Accent,
+    )
+    OmTile(
+        title = "Weekly",
+        modifier = Modifier.omGridSpan(2).aspectRatio(1f),
+        tone = OmTileTone.Paper,
+        backTitle = "8 posts, 3 read",
+    )
+    OmTile(
+        title = "Reading list",
+        modifier = Modifier.omGridSpan(4).aspectRatio(2f),
+        tone = OmTileTone.Ink,
+        onClick = { },
+    )
+}
+```
+
+A non-null `backTitle` enables a Y-axis flip on tap. The back face must carry information, not just an animation.
+
+### 4.5 Forms
+
+<img src="images/09-forms.png" width="240" />
+
+```kotlin
+OmCheckbox(checked = agree, onCheckedChange = { agree = it }, label = "Weekly digest")
+OmRadio(selected = choice == 1, onClick = { choice = 1 }, label = "Option one")
 OmSwitch(checked = notify, onCheckedChange = { notify = it })
 OmSlider(value = level, onValueChange = { level = it })
 ```
 
-标签固定在输入区上方，不做浮动动画。聚焦时底线从 1dp 变 2dp 并转 accent，槽位固定所以布局不抖。
+### 4.6 Feedback
 
-### 反馈
+<img src="images/10-status.png" width="240" />
 
 ```kotlin
 OmProgressBar(progress = 0.6f)
-OmProgressBar(progress = null)                        // 硬边扫描，非渐变拖尾
-
+OmProgressBar(progress = null)                        // hard-edge scan, no gradient trail
 OmProgressRing(progress = 0.6f)
-OmProgressRing(progress = null, size = 32.dp, strokeWidth = 3.dp)
+OmProgressRing(progress = null, size = 32.dp)
 
-OmSkeleton(Modifier.fillMaxWidth().height(20.dp))     // 明度呼吸
+OmSkeleton(Modifier.fillMaxWidth().height(20.dp))     // luminance breathing
 
-OmTag("标签")
-OmTag("已选", selected = true, onClick = { })
-OmTag("可删除", onRemove = { })
+OmTag("Tag")
+OmTag("Selected", selected = true, onClick = { })
+OmTag("Removable", onRemove = { })
 
 OmBadge(text = "3")
-OmBadge()                                             // 未读点
 OmAvatar("Ava", size = 40.dp)
+OmTooltip("Hint text")
 
-OmTooltip("提示文案")
-
-OmAccordion(title = "折叠面板", subtitle = "副标题") {
-    OmText("展开后的内容")
+OmEmptyState(title = "Nothing here", description = "Create one to start.") {
+    OmButton("New", onClick = { })
 }
 
-OmEmptyState(
-    title = "还没有内容",
-    description = "新建一条就可以开始。",
-) {
-    OmButton("新建", onClick = { })
+OmAccordion(title = "Section", subtitle = "Subtitle") {
+    OmText("Expanded content")
 }
 ```
 
-### 浮层
+### 4.7 Navigation
+
+<img src="images/11-rail.png" width="240" />
+
+```kotlin
+OmTopBar(title = "Settings", large = false, onBack = { })
+OmCollapsingTopBar(title = "Feed", scrollState = scrollState)   // 48sp -> 22sp on scroll
+
+OmPivot(
+    tabs = listOf("All", "Tech", "Design"),
+    selectedIndex = tab,
+    onSelect = { tab = it },
+)
+
+OmBottomBar(
+    items = listOf(
+        OmBottomBarItem("NEWS", OmIcons.Article),
+        OmBottomBarItem("LAB", OmIcons.Beaker),
+    ),
+    selectedIndex = page,
+    onSelect = { page = it },
+)
+
+OmRail(items = items, selectedIndex = page, onSelect = { page = it })   // >= 840dp
+OmDrawer(visible = open, onDismiss = { open = false }) { /* nav items */ }
+```
+
+### 4.8 Overlays
+
+<img src="images/12-dialog.png" width="240" />
 
 ```kotlin
 OmDialog(
     visible = showDialog,
     onDismiss = { showDialog = false },
-    title = "删除这条记录？",
+    title = "Delete this record?",
     actions = {
-        OmButton("取消", { showDialog = false }, variant = OmButtonVariant.Text)
-        OmButton("删除", { showDialog = false }, variant = OmButtonVariant.Destructive)
+        OmButton("Cancel", { showDialog = false }, variant = OmButtonVariant.Text)
+        OmButton("Delete", { showDialog = false }, variant = OmButtonVariant.Destructive)
     },
 ) {
-    OmText("删除后无法恢复。")
+    OmText("This cannot be undone.")
 }
 
-OmSheet(visible = showSheet, onDismiss = { showSheet = false }) {
-    OmText("面板内容")
-}
+OmSheet(visible = showSheet, onDismiss = { showSheet = false }) { /* content */ }
 
 OmSnackbar(
     visible = showSnackbar,
-    message = "已保存到本地",
-    actionLabel = "撤销",
+    message = "Saved locally",
+    actionLabel = "Undo",
     onAction = { showSnackbar = false },
 )
 ```
 
-`OmSheet` 的拖拽只挂在顶部 48dp 手柄区，内容区留给自己的滚动，不会误关面板。
+`OmSheet` drags from its 48dp handle only, leaving the content area free for its own scroll.
 
-### 轮播
+---
 
-```kotlin
-val pagerState = rememberPagerState(pageCount = { 3 })
-
-OmPager(
-    pageCount = 3,
-    state = pagerState,
-    modifier = Modifier.height(160.dp),
-) { page ->
-    Box(Modifier.fillMaxSize().background(OmTheme.colors.surfaceVariant)) {
-        OmText("第 ${page + 1} 页")
-    }
-}
-
-OmPagerIndicator(pageCount = 3, currentPage = pagerState.currentPage)
-```
-
-## 主题
+## 5. Theming
 
 ```kotlin
 OmTheme(
@@ -386,41 +348,46 @@ OmTheme(
 ) { ... }
 ```
 
-`onAccent` 由对比度算法自动选取。传入过浅的强调色会被拉深到对最不利表面 3:1。库不带字体，默认跟随系统，想要最佳效果需自己提供 Inter 与思源黑体：
+`onAccent` is chosen by a contrast algorithm. An accent that is too light gets darkened until it reaches 3:1 against the least favorable surface.
+
+The library ships no font files. It follows the system font by default; for best results supply Inter and Noto Sans SC yourself:
 
 ```kotlin
 OmTheme(typography = OmTypography.System.withFontFamily(myFontFamily)) { ... }
 ```
 
-| 项 | 值 |
+| Token | Values |
 |---|---|
-| 间距 | 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 dp |
-| 字阶 | 11 / 12 / 14 / 16 / 18 / 22 / 28 / 36 / 48 / 64 sp |
-| 字重 | 300 / 400 / 600 |
-| 强调色 | `#DA291C`，深色 `#FF5A4A` |
-| 描边 | 1dp 结构线 / 2dp 聚焦与选中 / 3dp Pivot 指示条 |
-| 动效 | 100 / 150 / 250 / 350 / 500 ms |
-| 触摸目标 | 48dp，标签内次级操作是唯一例外 |
+| Spacing | 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 / 96 dp |
+| Type scale | 11 / 12 / 14 / 16 / 18 / 22 / 28 / 36 / 48 / 64 sp |
+| Weights | 300 / 400 / 600 |
+| Accent | `#DA291C` light, `#FF5A4A` dark |
+| Strokes | 1dp structural, 2dp focus/selected, 3dp pivot indicator |
+| Motion | 100 / 150 / 250 / 350 / 500 ms |
 
-## 用之前要知道
+---
 
-| 约束 | 表现 |
+## 6. Constraints that shape usage
+
+| Constraint | Effect |
 |---|---|
-| 零圆角 | 只有头像、状态点、单选、进度环是圆的 |
-| 零阴影 | 没有 elevation，层级靠底色明度和字号 |
-| 单一强调色 | 状态色只能小面积使用 |
-| 4dp 网格 | 所有尺寸是 4 的倍数 |
-| 不写死高度 | 带文字的组件高度由内容决定，大字号下不裁切 |
+| Zero radius | Only avatars, status dots, radios and progress rings are round |
+| Zero elevation | No shadow parameter; hierarchy via luminance and type size |
+| Single accent | Status colors only in small areas |
+| 4dp grid | Every dimension is a multiple of 4 |
+| No fixed heights | Text-bearing components size themselves; large fonts won't clip |
 
-需要圆角卡片、悬浮按钮、水波纹、渐变背景的话，这个库不提供。
+If you need rounded cards, FABs, ripples or gradients, this library does not provide them and will not add them.
 
-## 配色校验
+---
 
-换掉强调色后跑一遍，确认配色还站得住：
+## 7. Validating your colors
+
+After swapping the accent, run the checker:
 
 ```kotlin
 @Test
-fun `配色符合规范`() {
+fun `colors conform to spec`() {
     OmCheck.requireContrast(OmColorScheme.paper())
     OmCheck.requireContrast(OmColorScheme.ink())
     OmCheck.requireTypography(OmTypography.System)
@@ -429,39 +396,47 @@ fun `配色符合规范`() {
 }
 ```
 
-覆盖对比度（含全部磁贴色对）、4dp 网格、触摸目标、字阶行高、间距档位。
+Covers contrast (including every tile pair), the 4dp grid, touch targets, type scale and line heights, and spacing steps. Must be declared as `testImplementation`.
 
-## Demo
+---
 
-`sample/` 是五页应用：资讯流、规范、组件画廊、Lab 调参台、设置。Lab 里可以实时改 accent、主题、字号缩放，并叠加 4dp 网格看对齐。
+## 8. Demo
+
+`sample/` is a five-page app: feed, spec, component gallery, Lab, settings. Lab lets you change accent, theme, font scale and overlay a 4dp grid at runtime.
 
 ```bash
-./build.sh            # 单测 + 编译 + 归档
-./build.sh --install  # 装到设备并启动
+./build.sh              # tests + build + archive APK
+./build.sh --install    # install to device
 ```
 
-## 工程结构
+A prebuilt APK is attached to each [release](https://github.com/Jeta1me1PLUS/OpenMetroUI/releases).
+
+---
+
+## 9. Project structure
 
 ```text
-omui-core/         token、主题、交互原语、栅格布局
-omui-components/   38 个组件
-omui-icons/        13 个几何图标
-omui-test/         OmCheck 设计约束校验（只在测试配置里用）
-sample/            五页 demo
-smoke/             发布产物接入验证（只用 Maven 坐标）
+omui-core/         tokens, theme, interaction primitives, grid layout
+omui-components/   38 components
+omui-icons/        13 geometric icons
+omui-test/         OmCheck design-spec validation
+sample/            five-page demo
+smoke/             consumes the published artifact via Maven coordinates only
 ```
 
-`dist/` 是 `publishToDist` 的生成物，不进版本库。
+`dist/` is generated by `publishToDist` and is not tracked.
 
-## 已知限制
+---
 
-- `OmTag` 的删除按钮命中区 28dp，低于 48dp 常规下限
-- `OmSheet` 只能拖顶部手柄展开，不能从内容区上滑
-- `OmCard` 的 Ink 变体只换底色，文字颜色要自己处理
-- RTL 与 TalkBack 未做系统走查
+## 10. Known limitations
 
-变更记录见 [CHANGELOG.md](CHANGELOG.md)。
+- `OmTag` delete button has a 28dp hit area, below the 48dp guideline
+- `OmSheet` only expands from its handle, not from the content area
+- `OmCard` Ink variant changes only the background; text color is the caller's job
+- RTL and TalkBack have not been systematically audited
 
-## License
+---
+
+## 11. License
 
 Apache License 2.0
