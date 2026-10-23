@@ -64,7 +64,7 @@ implementation("io.github.jeta1me1plus:omui-components:0.10.10")
 
 **本地仓库**
 
-仓库里的 `dist/` 是一个可以直接使用的 Maven 仓库：
+运行下面的命令，会在项目根目录生成 `dist/`，它是一个可以直接拷走的 Maven 仓库：
 
 ```bash
 ./gradlew publishToDist
@@ -443,8 +443,9 @@ omui-icons/        13 个几何图标
 omui-test/         OmCheck 设计约束校验（只在测试配置里用）
 sample/            五页 demo
 smoke/             发布产物接入验证（只用 Maven 坐标）
-dist/              发布产物：本地 Maven 仓库 + 使用说明
 ```
+
+`dist/` 是 `publishToDist` 的生成物，不进版本库。
 
 ## 已知限制
 
