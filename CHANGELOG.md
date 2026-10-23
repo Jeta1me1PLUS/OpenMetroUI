@@ -1,12 +1,12 @@
 # CHANGELOG
 
-按版本倒序，只列改了什么。版本口径见 [docs/04-progress.md](docs/04-progress.md)。
+按版本倒序，只列改了什么。
 
 ## v0.10.10 · 2026-10-23
 
 ### 新增
 
-- `docs/images/` 四张模拟器截图（Pixel 6 / API 35）：Paper 资讯流、Ink 深色、Lab 调参台、组件画廊。README 顶部以表格并排展示。
+- `images/` 四张模拟器截图（Pixel 6 / API 35）：Paper 资讯流、Ink 深色、Lab 调参台、组件画廊。README 顶部以表格并排展示。
 
 ### 修复
 

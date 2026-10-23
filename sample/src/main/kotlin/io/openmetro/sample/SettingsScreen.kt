@@ -85,7 +85,7 @@ fun SettingsScreen(lab: LabSettings, onLabChange: (LabSettings) -> Unit) {
             OmDivider()
             OmListItem(
                 title = "设计规范",
-                subtitle = "docs/00-design-language.md",
+                subtitle = "全部规则写在 README",
                 onClick = {},
             )
         }

@@ -52,7 +52,7 @@ data class OmTileColors(
  * 语义配色表。组件只允许使用这里的语义别名，不允许直接引用中性阶。
  *
  * 深色主题不是浅色的简单反相：中性阶在中段做过压缩调整，保证 `textSecondary`
- * 在两套主题下都稳定达到 4.5:1。具体数值与推导规则见 docs/00-design-language.md。
+ * 在两套主题下都稳定达到 4.5:1。
  */
 @Immutable
 data class OmColorScheme(

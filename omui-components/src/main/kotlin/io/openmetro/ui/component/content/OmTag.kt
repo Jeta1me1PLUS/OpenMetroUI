@@ -78,7 +78,7 @@ fun OmTag(
         if (onRemove != null) {
             Spacer(Modifier.width(spacing.space1))
             // 命中区取标签的完整高度（28dp），比图标本身大四倍。
-            // 仍低于 48dp 下限，这是 docs/00 里登记过的例外：标签内的次级操作。
+            // 仍低于 48dp 下限，这是触摸目标规则的唯一例外：标签内的次级操作。
             Box(
                 modifier = Modifier
                     .size(TagHeight)

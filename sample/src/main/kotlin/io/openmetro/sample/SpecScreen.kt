@@ -34,7 +34,7 @@ import io.openmetro.ui.core.theme.OmTileColor
 import java.util.Locale
 
 /**
- * 活规范的第一个页面：把 docs/00-design-language.md 的表格变成能看的实物。
+ * 把规范里的色板、字阶、间距变成能看的实物。
  * 任何 token 改动都会立刻在这里显形。
  */
 @Composable

@@ -25,7 +25,7 @@ object OmCheck {
     const val GridUnit: Float = 4f
     const val MinTouchTarget: Float = 48f
 
-    /** 字阶表允许的字号，见 docs/00-design-language.md。 */
+    /** 字阶表允许的字号。 */
     val AllowedFontSizes: Set<Float> = setOf(11f, 12f, 14f, 16f, 18f, 22f, 28f, 36f, 48f, 64f)
 
     /** 只允许三档字重。 */
