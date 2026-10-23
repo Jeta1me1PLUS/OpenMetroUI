@@ -1,0 +1,40 @@
+name: publish
+
+# 打 v* 标签时自动发布到 GitHub Packages；也可以在 Actions 页面手动触发。
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # runner 自带 Android SDK，但不一定装了 compileSdk 36；装失败也不阻断，
+      # 真缺平台时会在编译阶段报清楚。
+      - name: 准备 Android SDK
+        run: |
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" \
+            "platforms;android-36" "build-tools;36.0.0" > /dev/null 2>&1 || true
+
+      - name: 单元测试与编译
+        run: ./gradlew :omui-core:testDebugUnitTest :omui-test:testDebugUnitTest :sample:assembleDebug --console=plain
+
+      - name: 发布到 GitHub Packages
+        run: ./gradlew publishToGithub --console=plain
+        env:
+          GITHUB_ACTOR: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

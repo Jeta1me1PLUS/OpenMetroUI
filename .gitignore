@@ -1,0 +1,23 @@
+*.iml
+.gradle/
+.idea/
+.DS_Store
+build/
+**/build/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+*.hprof
+
+# 构建脚本产物
+build.log
+OpenMetroUI-v*-debug.apk
+OpenMetroUI-v*-release.apk
+
+# 发布产物（可由 ./gradlew publishToDist 重新生成；dist/README.md 需要提交）
+dist/maven/
+dist/*.zip
+
+# Kotlin 2.x 会话缓存
+.kotlin/

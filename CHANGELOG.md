@@ -1,0 +1,302 @@
+# CHANGELOG
+
+按版本倒序，只列改了什么。版本口径见 [docs/04-progress.md](docs/04-progress.md)。
+
+## v0.10.10 · 2026-10-23
+
+### 新增
+
+- `docs/images/` 四张模拟器截图（Pixel 6 / API 35）：Paper 资讯流、Ink 深色、Lab 调参台、组件画廊。README 顶部以表格并排展示。
+
+### 修复
+
+- `OmTile` 的 Paper 色调缺少 1dp 描边。白磁贴在米白底上、深灰磁贴在近黑底上边界完全不可见，三块磁贴会糊成一片。规范 `00` 里本来就要求这条描边，是实现漏做。
+
+### 变更
+
+- demo 的收件箱磁贴改为 `title = "收件箱"` + `label = "3 条新消息"`，避免 28sp 标题在 156dp 宽的磁贴里断行成「3 条新消 / 息」。
+
+## v0.10.9 · 2026-10-23
+
+### 变更（坐标迁移，**会影响依赖写法**）
+
+- groupId 从 `io.openmetro` 改为 `io.github.jeta1me1plus`。`io.github.*` 由 GitHub 账号验证，不需要域名，Maven Central 与 GitHub Packages 都接受。
+- 依赖写法：`io.github.jeta1me1plus:omui-components:<版本>`。
+- POM 的 `url` / `scm` / `developer` 指向 `github.com/Jeta1me1PLUS/OpenMetroUI`。
+- `dist/maven` 的目录结构随之变为 `io/github/jeta1me1plus/...`。
+
+### 新增
+
+- GitHub Packages 发布通道：`./gradlew publishToGithub`。仓库只在检测到凭证时挂载，不影响本地构建。
+- `.github/workflows/publish.yml`：打 `v*` 标签自动运行测试并发布到 GitHub Packages，也支持手动触发。
+
+## v0.10.8 · 2026-10-23
+
+外部项目接入反馈的三条修正。
+
+### 新增
+
+- `OmIconButton`：图标按钮，48dp 触摸区 + 24dp 图标，支持 `enabled` 与自定义 `tint`。`OmTopBar` 的返回键改为复用它。
+
+### 变更（**升级需注意**）
+
+- `OmTheme` 默认铺一层 `background` 底色。深色主题下不再露出浅色窗口底；局部嵌套主题请传 `paintBackground = false`（内部用 `fillMaxSize`，无界高度里会抛约束异常）。
+- `OmScreen` 默认用 `windowInsetsPadding(WindowInsets.safeDrawing)` 避开系统栏。骨架外层已统一处理 insets 时传 `applyInsets = false`，否则会双倍间距。
+- sample 骨架随之上移一层职责：内容区交给 `OmScreen`，底部导航自己 `navigationBarsPadding()`。
+
+## v0.10.5 · 2026-10-21
+
+### 新增
+
+- `dist/` 交付目录：`dist/maven` 是可直接拷走的本地 Maven 仓库（AAR + sources + POM + 校验和），`dist/README.md` 是面向使用者的完整说明。
+- 根项目 `publishToDist` 聚合任务，一次生成四个模块的产物。
+
+### 修复
+
+- **发布产物里的依赖没有版本号**：原先用 `api(platform(compose-bom))` 导出 Compose 依赖，Gradle 不会把版本写进 POM / module metadata，宿主解析会直接失败。改为 `compose = "1.11.4"` 显式版本，POM 与 metadata 均带版本。
+
+### 变更
+
+- `libs.versions.toml` 增加 `compose` 版本，六个 Compose 依赖改为显式引用。
+- `.gitignore` 忽略 `dist/maven`（可重新生成），保留 `dist/README.md`。
+
+## v0.10.4 · 2026-10-21
+
+### 新增
+
+- 四个模块的 `maven-publish` 配置：`release` 变体 + sources jar，坐标 `io.openmetro:omui-core / omui-components / omui-icons / omui-test`。
+- README 增加「快速开始」：本地仓库接入、最小页面、替换强调色、配色校验。
+
+### 修复
+
+- `OmTag` 删除按钮的命中区由 14dp 扩大到标签完整高度 28dp。这是触摸目标 48dp 规则的唯一例外，已登记在 `00`。
+- `OmSheet` 的拖拽手势从整块面板移到顶部 48dp 手柄区，面板内放滚动列表时不再被拖拽抢走手势。代价是不能从内容区上滑展开。
+
+### 变更
+
+- `build.sh` 支持 `--release`，按构建类型选择任务、产物路径与归档命名。
+
+## v0.10.2 · 2026-10-21
+
+### 修复
+
+- `OmTileMode.Spectrum` 开关无效：`tileMode` 只下发了 CompositionLocal，没有组件读取。新增 `OmTileTone`（Paper / Quiet / Ink / Accent）与 `OmTileColors.resolve(tone, mode)`，`OmTile` 的 `color` 改为可空覆盖，默认按色调取色。
+- 底部栏 `items` 每次重组重新 `map`，List 引用一直变，`OmBottomBar` 无法跳过重组。改为顶层 `by lazy` 缓存。
+
+### 新增
+
+- sample 的 `release` buildType：使用 debug 签名、不开启混淆，产物可直接安装，用于判断卡顿是否只来自 debug 构建。
+
+### 变更
+
+- `OmTile` 调用点由 `color = colors.tiles.xxx` 改为 `tone = OmTileTone.xxx`。
+
+## v0.10.0 · 2026-10-21
+
+P2 完成，37 个组件全部落地。
+
+### 新增
+
+- `OmProgressRing`：确定态按比例画弧（起点 -90°，端点为 Butt），不确定态为 90° 弧段旋转。
+- `OmPager`：基于 foundation `HorizontalPager` 的分页轮播；`OmPagerIndicator` 用 24×3dp 直角线段。
+- `OmCollapsingTopBar`：滚动超过 48px 后从 48sp 大标题切到 22sp 紧凑标题，`AnimatedContent` 淡入 + 上滑，不做连续字号插值。
+
+### 变更
+
+- `OmScreen` 增加 `scrollState` 参数，可把同一个滚动状态交给 `OmCollapsingTopBar`。
+- NEWS 页改为「固定页头 + 滚动内容」，滚动时标题收缩。
+- demo 画廊新增 PAGER 区，Progress 区补环形进度。
+
+### 修复
+
+- `OmCollapsingTopBar` 在组合期直接读 `scrollState.value`，会随每一帧滚动重组；改用 `derivedStateOf` 只在跨阈值时变化。
+
+### 未验证
+
+- 页头收缩的切换时机、Pager 吸附与页码同步、环形进度旋转的视觉速度。
+
+## v0.9.0 · 2026-10-21
+
+### 新增
+
+- `OmAccordion`：标题行 + 副标题，展开用 `expandVertically` + `fadeIn`，指示器同步旋转 90°；展开状态由组件内部持有。
+- `OmRail`：侧边导航，宽 80dp、每项 72dp，图标在上标签在下，选中态为 start 侧 3dp accent 竖条。
+- `OmDrawer`：从 start 侧滑出的直角面板，最宽 320dp（窄屏 82%），滑入方向按 `LocalLayoutDirection` 镜像。
+- demo 画廊新增 ACCORDION / RAIL 两区，OVERLAY 区增加 DRAWER 入口（内容为三项导航列表）。
+
+### 未验证
+
+- 折叠展开的高度动画、侧栏在 840dp+ 设备上的宽度占比、抽屉在 RTL 下的滑入方向。
+
+## v0.8.0 · 2026-10-21
+
+### 新增
+
+- `OmSnackbar`：反白底 + 左侧 4dp accent 竖条；淡入 + 上移 24dp；操作文字用 `onInverse` 加 2dp accent 下划线。
+- `OmBadge`：直角角标，18dp 高；`text = null` 时显示 8dp 实心方块（未读点）。
+- `OmSkeleton`：明度脉冲（40%–100% 呼吸），不是扫光渐变。
+- `OmEmptyState`：巨字标题 + 网格线「取景框」图形（外框 / 十字 / 2dp accent 中心块），支持描述与动作槽位。
+- `OmSearchField`：填充变体输入框 + 搜索图标 + 有内容时的清除按钮。
+- `OmTooltip`：反白底直角提示，无箭头。
+
+### 变更
+
+- `OmTextField` 增加 `onTrailingIconClick`；尾部图标用 48dp Box 撑触摸区（`OmIcon` 会覆盖 modifier 的 size）。
+- demo 画廊新增 STATUS 区（Badge / Skeleton / Tooltip / EmptyState / Snackbar），INPUT 区加搜索框。
+
+### 未验证
+
+- Snackbar 入场动画、骨架脉冲在深色主题下的可读性、EmptyState 图形比例。
+
+## v0.7.0 · 2026-10-21
+
+### 新增
+
+- `omui-test` 模块与 `OmCheck`：
+  - `requireContrast` / `contrastViolations`：遍历语义色对与磁贴色对
+  - `requireOnGrid` / `gridViolations`：4dp 网格
+  - `requireTouchTarget` / `touchTargetViolation`：48dp 下限
+  - `requireTypography` / `typographyViolations`：字号必须在字阶表内、行高是 4sp 倍数、字重只有 300/400/600
+  - `requireSpacing` / `spacingViolations`、`gridConfigViolations`
+- demo 的 LAB 页：实时调 accent（6 个预设）、Paper/Ink、Monochrome/Spectrum、字号缩放 0.85–1.60×。
+- 网格叠加层 `GridOverlay`：4dp 基线（中性色 10%）+ 栏网格（accent 30%），叠加在所有页面之上。
+- `OmIcons.Beaker`（第 13 个图标）。
+
+### 变更
+
+- `OmColorScheme.contrastChecks()` 与 `ContrastCheck` 改为 public，供 `omui-test` 复用同一份清单。
+- `OmContrast` 增加接受 `Color` 的 `ratio` 重载。
+- `build.sh` 串入 `:omui-test:testDebugUnitTest` 与 `:omui-test:lintDebug`。
+- demo 由四页变五页，`LabSettings` 状态提升到 `MainActivity`。
+
+### 未验证
+
+- 字号缩放到 1.6× 时各页面的实际布局、网格叠加层在真机上的可读性。
+
+## v0.6.0 · 2026-10-21
+
+P1 完成。
+
+### 新增
+
+- `OmCard`：Flat / Outlined / Ink 三变体，直角、无阴影，内边距 16dp。
+- `OmCheckbox`：20dp 方形，选中填充 accent + 2dp 白勾（方头直角），勾用 `Path` 绘制。
+- `OmRadio`：20dp 圆环 + accent 实心内点。
+- `OmSlider`：2dp 轨道 + 16dp 方形滑块；用 `awaitEachGesture` 同时支持点击定位与拖动跟手。
+- `OmProgressBar`：4dp 直角；确定态按比例填充，不确定态为硬边方块扫描（无渐隐拖尾）。
+- `OmTag`：28dp 直角标签，未选中 1dp 描边、选中 accent 填充，支持可点与可删除。
+- `OmAvatar`：圆形首字母头像，字号随直径缩放（0.4 倍），24/32/40/56dp。
+- `OmDialog`：平台 Dialog + 自绘全屏 scrim，宽度上限 400dp，淡入 + 上移 24dp，按钮行右对齐。
+- `OmSheet`：底部面板，两档高度（半屏 / 全屏），拖拽跟手（`snap()`）、松手 250ms 回弹。
+- demo 画廊新增 CARD / FORM / TAG·AVATAR / OVERLAY 四区。
+
+### 变更
+
+- `OmDialog` 参数顺序：`actions` 放在 `content` 之前，使正文可用 trailing lambda。
+
+### 未验证
+
+- Dialog 的返回键与点击外部关闭、Sheet 拖拽阈值与高度切换、Slider 点击定位精度、ProgressBar 扫描动画。
+
+## v0.5.0 · 2026-10-21
+
+### 新增
+
+- `OmPivot`：横向页签，选中项下方 3dp accent 指示条，宽度等于文字宽度；未选中时透明占位，切换不改变高度。
+- `OmBottomBar`：3–5 项等分，选中态为顶部 3dp accent 条 + accent 着色。
+- `OmSwitch`：44×24 直角轨道 + 20dp 方形滑块，150ms 位移，触摸区 48dp。
+- `OmIcons` 新增 Grid / Sliders / Article 三个图标（共 12 个）。
+- demo 四页骨架：底部导航切换 NEWS / SPEC / UI / SETTINGS。
+- Showcase 资讯流页：大标题页头 + Pivot + 磁贴（含翻转）+ 文章列表。
+- Showcase 设置页：四个分组列表 + 三个开关 + 主题切换 + 版本号读 `BuildConfig`。
+
+### 变更
+
+- `OmScreen` 增加 `scrollable` 参数（整页滚动）。
+- Spec 与 Gallery 拆成两个独立页面，页面容器统一由 `OmScreen` 负责。
+- sample 启用 `buildConfig`，设置页版本号不再手写。
+
+### 修复
+
+- `OmSwitch` 的滑块偏移改用 `Modifier.offset {}` lambda 版本，避免选中时每帧重组。
+- `NewsScreen` 的选中页签索引改用 `mutableIntStateOf`，避免 Int 装箱。
+
+### 未验证
+
+- 四页切换时底部导航的选中反馈、Pivot 指示条与文字宽度是否严格一致、开关在列表行右侧的垂直对齐。
+
+## v0.4.0 · 2026-10-21
+
+P0 完成。
+
+### 新增
+
+- `OmListItem`：22sp 主文本 + 可选次级文本；选中态为整行 `accentQuiet` + start 侧 3dp accent 竖条（竖条用 `drawBehind` 绘制，不占布局宽度）；最小高度 56dp，高度由内容决定。
+- `OmList`：数据驱动，自动在项之间插入 hairline 分隔线，最后一项不画。
+- `OmTile`：色块磁贴，整块可点；Y 轴翻转（350ms，`cameraDistance = 12×density`，背面再转 180° 防镜像）；标题字号按实际宽度自适应（<100dp 用 18sp，<160dp 用 28sp，否则 36sp）。
+- `OmTileGrid`：`OmGrid` 的语义包装，为后续出血与尺寸预设留位置。
+- demo 增加列表与磁贴区（含翻转磁贴、Spectrum 四色）。
+
+### 未验证
+
+- 磁贴翻转的透视观感、背面内容可读性、选中竖条与分隔线是否打架。
+
+## v0.3.0 · 2026-10-21
+
+### 新增
+
+- `OmTextField`：下划线 / 填充两种变体；标签固定在输入区上方（无浮动动画）；聚焦 2dp accent 线、错误 2dp danger 线；底部线槽位恒为 2dp，线变粗时布局不抖；支持多行、前置/后置图标、辅助与错误文本。
+- `OmTopBar`：大标题（48sp Light + 可选全大写标签）与紧凑（22sp）两种形态；高度由内容决定；返回按钮 48dp 触摸区 + 焦点环。
+- demo 增加输入区（下划线/填充/错误/禁用、多行带图标）与页头示例（大标题、紧凑 + 操作区）。
+
+### 变更
+
+- `omui-components` 增加对 `omui-icons` 的 `api` 依赖，用于页头的默认返回箭头。
+
+### 未验证
+
+- 输入框聚焦时下划线由 1dp 变 2dp、多行输入的高度增长、大标题在窄屏的两行换行。
+
+## v0.2.0 · 2026-10-21
+
+### 新增
+
+- `Modifier.omClickable`：明度下沉式按压反馈（8% 黑 / 10% 白覆盖层），替代水波纹。
+- `Modifier.omFocusRing`：2dp accent 焦点环，画在元素外侧，不改变布局。
+- `OmGrid` + `Modifier.omGridSpan(span, offset)`：跨栏布局，一行排满自动换行，行高取该行最高子项。
+- `OmScreen`：页边距 + 正文最大宽度（640dp）。
+- `OmSection`：固定区块节奏（上间距 32dp + 可选标签/标题）。
+- `OmIcon`：单色几何图标渲染，默认 24dp。
+- `OmButton`：5 变体（Filled / FilledInk / Outlined / Text / Destructive）× 3 尺寸 × 禁用/图标/填充宽度。
+- `OmIcons`：9 个几何图标（ArrowBack、ArrowForward、Close、Check、Add、ChevronEnd、Menu、Search、MoreVert），24dp 画布、1.5dp 描边、方头端点。
+- demo 的 `GallerySection`：按钮全状态、图标集、跨栏网格演示。
+
+### 变更
+
+- `omui-icons` 由空模块变为可用模块。
+
+### 未验证
+
+- 按钮按压与焦点环的实际观感、网格在窄屏的换行、图标路径的视觉重量。
+
+## v0.1.0 · 2026-10-21
+
+### 新增
+
+- Gradle 四模块工程：`omui-core`、`omui-components`、`omui-icons`、`sample`（AGP 9.1.0 / Gradle 9.3.1 / Kotlin 2.2.20 / compileSdk 36 / minSdk 24）。
+- Token 层：语义配色（Paper / Ink）、10 个字阶、9 档间距、栏网格、形状与描边、动效时长与缓动。
+- `OmTheme` 与 7 个细粒度 CompositionLocal；强调色与 `onAccent` 自动推导。
+- 对比度体系：`OmContrast` 纯 Kotlin 实现 + 构建期色对校验（8 个单元测试）。
+- 过浅 / 过暗的强调色自动拉回可辨识范围（对最不利表面 ≥ 3:1）。
+- L1 原语：`OmText`、`OmSurface`、`OmDivider`。
+- demo 的 Spec 页：色板、语义色、字阶、间距、描边、磁贴色，支持 Paper / Ink 切换。
+
+### 变更
+
+- Paper `neutral.500`：`#8E8E88` → `#85857F`（对 `surfaceVariant` 由 2.94:1 提升到 3.31:1）。
+- Ink `neutral.600`：`#7A7A74` → `#90908A`（对 `surfaceVariant` 由 3.92:1 提升到 4.71:1）。
+- 新增语义 token `fieldLine`，承担输入框底线等必须可辨识的控件边界。
+
+### 未验证
+
+- 真机渲染、Ink 主题下的系统栏图标、`display.xl` 在窄屏的实际观感、Spectrum 八色的协调度。

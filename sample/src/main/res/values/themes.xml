@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        窗口层只管「启动时闪一下什么颜色」。真正的主题由 Compose 的 OmTheme 负责，
+        这里刻意不用 Material 主题，避免引入任何 M3 语义。
+    -->
+    <style name="Theme.OpenMetroUI" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">#FAFAF8</item>
+    </style>
+</resources>
