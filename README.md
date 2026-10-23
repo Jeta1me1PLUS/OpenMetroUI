@@ -15,7 +15,7 @@
   </tr>
 </table>
 
-当前版本 0.10.10，38 个组件可用，已在真机走查。尚未发布到 Maven Central。
+当前版本 0.10.10，38 个组件可用，已在真机走查。
 
 ## 设计思路
 
@@ -38,7 +38,13 @@ Metro 和瑞士国际主义是两条独立的源流，但底子是同一套：�
 
 ## 安装
 
-还没上 Maven Central，用 GitHub Packages 或本地仓库。
+**Maven Central**
+
+```kotlin
+implementation("io.github.jeta1me1plus:omui-components:0.10.10")
+```
+
+不需要额外仓库配置。`0.10.10` 正在提交到 Maven Central，同步完成后这行就能直接解析。如果暂时拿不到，用下面两种方式之一。
 
 **GitHub Packages**
 
