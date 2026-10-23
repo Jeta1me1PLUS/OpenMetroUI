@@ -21,3 +21,6 @@ dist/*.zip
 
 # Kotlin 2.x 会话缓存
 .kotlin/
+
+# 本地开发文档（长期记录，不随仓库发布）
+docs/
