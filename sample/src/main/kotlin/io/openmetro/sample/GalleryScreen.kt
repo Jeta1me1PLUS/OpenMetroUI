@@ -1,5 +1,14 @@
 package io.openmetro.sample
 
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntOffset
+import io.openmetro.ui.component.content.OmStat
+import io.openmetro.ui.component.content.OmSparkline
+import io.openmetro.ui.component.content.OmTable
+import io.openmetro.ui.component.content.OmTableColumn
+import io.openmetro.ui.component.content.OmColumnAlign
+import io.openmetro.ui.component.overlay.OmMenu
+import io.openmetro.ui.component.overlay.OmMenuItem
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -97,6 +106,8 @@ fun GalleryScreen() {
     var count by remember { mutableIntStateOf(1) }
     var dropdownIndex by remember { mutableIntStateOf(0) }
     var date by remember { mutableStateOf<OmDate?>(null) }
+    var menuOpen by remember { mutableStateOf(false) }
+    val density = LocalDensity.current
     var drawerVisible by remember { mutableStateOf(false) }
     var railIndex by remember { mutableIntStateOf(0) }
 
@@ -483,6 +494,61 @@ fun GalleryScreen() {
 
         SubTitle("Date")
         OmDatePicker(selected = date, onSelect = { date = it })
+    }
+
+    OmSection(label = "DATA / 数据") {
+        SubTitle("Stat")
+        OmGrid(columns = 2, gutter = spacing.space4) {
+            OmStat(
+                value = "1,284",
+                label = "MONTHLY ACTIVE",
+                delta = "+12%",
+                modifier = Modifier.omGridSpan(1),
+            )
+            OmStat(
+                value = "98.2%",
+                label = "UPTIME",
+                delta = "-0.3%",
+                deltaPositive = false,
+                modifier = Modifier.omGridSpan(1),
+            )
+        }
+
+        SubTitle("Sparkline")
+        OmSparkline(values = listOf(3f, 5f, 4f, 8f, 6f, 9f, 7f, 12f))
+
+        SubTitle("Table")
+        OmTable(
+            columns = listOf(
+                OmTableColumn("名称", weight = 2f),
+                OmTableColumn("数量", weight = 1f, align = OmColumnAlign.End),
+                OmTableColumn("状态", weight = 1f, align = OmColumnAlign.End),
+            ),
+            rows = listOf(
+                listOf("收件箱", "128", "正常"),
+                listOf("草稿", "12", "同步中"),
+                listOf("归档", "2,041", "正常"),
+            ),
+            onRowClick = {},
+        )
+
+        SubTitle("Menu")
+        Box {
+            OmButton(
+                text = "打开菜单",
+                onClick = { menuOpen = true },
+                variant = OmButtonVariant.Outlined,
+            )
+            OmMenu(
+                expanded = menuOpen,
+                onDismissRequest = { menuOpen = false },
+                offset = IntOffset(0, with(density) { 48.dp.roundToPx() }),
+            ) {
+                OmMenuItem("重命名", onClick = { menuOpen = false })
+                OmMenuItem("复制链接", onClick = { menuOpen = false })
+                OmMenuItem("删除", onClick = { menuOpen = false }, destructive = true)
+            }
+        }
     }
 
     OmSection(label = "TAG / AVATAR") {

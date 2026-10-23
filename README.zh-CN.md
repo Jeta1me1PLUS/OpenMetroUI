@@ -16,7 +16,7 @@
   </tr>
 </table>
 
-42 个组件，已在真机走查。要求 minSdk 24、Compose 1.11.4 以上。
+46 个组件，已在真机走查。要求 minSdk 24、Compose 1.11.4 以上。
 
 ---
 
@@ -130,7 +130,7 @@ setContent {
 | 布局 | `OmScreen` `OmSection` `OmGrid` `Modifier.omGridSpan` |
 | 导航 | `OmTopBar` `OmCollapsingTopBar` `OmPivot` `OmBottomBar` `OmRail` `OmDrawer` |
 | 磁贴 | `OmTile` `OmTileGrid` |
-| 内容 | `OmCard` `OmList` `OmListItem` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmAccordion` `OmPager` `OmPagerIndicator` |
+| 内容 | `OmCard` `OmList` `OmListItem` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmAccordion` `OmPager` `OmPagerIndicator` `OmStat` `OmSparkline` `OmTable` |
 | 输入 | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` `OmSegmentedControl` `OmStepperInput` `OmDropdown` `OmDatePicker` |
 | 反馈 | `OmProgressBar` `OmProgressRing` `OmSkeleton` `OmSnackbar` |
 | 浮层 | `OmDialog` `OmSheet` |
@@ -356,6 +356,37 @@ OmSnackbar(
 
 `OmSheet` 只从顶部 48dp 手柄拖动，内容区留给自己的滚动。
 
+
+### 4.9 数据
+
+<img src="images/15-data.png" width="240" />
+<img src="images/16-menu.png" width="240" />
+
+```kotlin
+OmStat(value = "1,284", label = "MONTHLY ACTIVE", delta = "+12%")
+OmStat(value = "98.2%", label = "UPTIME", delta = "-0.3%", deltaPositive = false)
+
+OmSparkline(values = listOf(3f, 5f, 4f, 8f, 6f, 9f, 7f, 12f))
+
+OmTable(
+    columns = listOf(
+        OmTableColumn("名称", weight = 2f),
+        OmTableColumn("数量", weight = 1f, align = OmColumnAlign.End),
+    ),
+    rows = listOf(listOf("收件箱", "128"), listOf("草稿", "12")),
+    onRowClick = { },
+)
+
+OmMenu(
+    expanded = open,
+    onDismissRequest = { open = false },
+    offset = IntOffset(0, 48.dp.roundToPx()),
+) {
+    OmMenuItem("重命名", onClick = { open = false })
+    OmMenuItem("删除", onClick = { open = false }, destructive = true)
+}
+```
+
 ---
 
 ## 5. 主题
@@ -438,7 +469,7 @@ fun `配色符合规范`() {
 
 ```text
 omui-core/         token、主题、交互原语、栅格布局
-omui-components/   42 个组件
+omui-components/   46 个组件
 omui-icons/        13 个几何图标
 omui-test/         OmCheck 设计约束校验
 sample/            五页 demo
@@ -454,6 +485,7 @@ smoke/             只用 Maven 坐标消费发布产物，验证其完整可用
 - `OmTag` 删除按钮命中区 28dp，低于 48dp 常规下限
 - `OmSheet` 只能从手柄展开，不能从内容区上滑
 - `OmCard` 的 Ink 变体只换底色，文字颜色要调用方自己处理
+- `OmMenu` 不会在屏幕边缘自动翻转，靠近底部时需要传负的 offset
 - RTL 与 TalkBack 未做系统性走查
 
 ---

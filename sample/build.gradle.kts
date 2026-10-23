@@ -13,7 +13,7 @@ android {
         targetSdk = 36
         // MINOR * 100 + PATCH：0.11.0 -> 1100。
         // 旧规则 MINOR + PATCH 在 0.11.0 会算出 11，小于 0.10.10 的 20，不单调。
-        versionCode = 1100
+        versionCode = 1200
         // 与三个 library 模块共用 gradle.properties 里的唯一真源。
         versionName = providers.gradleProperty("OM_VERSION").get()
     }

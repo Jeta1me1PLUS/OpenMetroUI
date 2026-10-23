@@ -16,7 +16,7 @@ A Jetpack Compose UI library that fuses **Metro tiles** with **Swiss Internation
   </tr>
 </table>
 
-42 components, verified on device. Requires minSdk 24 and Compose 1.11.4+.
+46 components, verified on device. Requires minSdk 24 and Compose 1.11.4+.
 
 ---
 
@@ -130,7 +130,7 @@ Three rules:
 | Layout | `OmScreen` `OmSection` `OmGrid` `Modifier.omGridSpan` |
 | Navigation | `OmTopBar` `OmCollapsingTopBar` `OmPivot` `OmBottomBar` `OmRail` `OmDrawer` |
 | Tiles | `OmTile` `OmTileGrid` |
-| Content | `OmCard` `OmList` `OmListItem` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmAccordion` `OmPager` `OmPagerIndicator` |
+| Content | `OmCard` `OmList` `OmListItem` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmAccordion` `OmPager` `OmPagerIndicator` `OmStat` `OmSparkline` `OmTable` |
 | Inputs | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` `OmSegmentedControl` `OmStepperInput` `OmDropdown` `OmDatePicker` |
 | Feedback | `OmProgressBar` `OmProgressRing` `OmSkeleton` `OmSnackbar` |
 | Overlays | `OmDialog` `OmSheet` |
@@ -356,6 +356,37 @@ OmSnackbar(
 
 `OmSheet` drags from its 48dp handle only, leaving the content area free for its own scroll.
 
+
+### 4.9 Data
+
+<img src="images/15-data.png" width="240" />
+<img src="images/16-menu.png" width="240" />
+
+```kotlin
+OmStat(value = "1,284", label = "MONTHLY ACTIVE", delta = "+12%")
+OmStat(value = "98.2%", label = "UPTIME", delta = "-0.3%", deltaPositive = false)
+
+OmSparkline(values = listOf(3f, 5f, 4f, 8f, 6f, 9f, 7f, 12f))
+
+OmTable(
+    columns = listOf(
+        OmTableColumn("Name", weight = 2f),
+        OmTableColumn("Count", weight = 1f, align = OmColumnAlign.End),
+    ),
+    rows = listOf(listOf("Inbox", "128"), listOf("Drafts", "12")),
+    onRowClick = { },
+)
+
+OmMenu(
+    expanded = open,
+    onDismissRequest = { open = false },
+    offset = IntOffset(0, 48.dp.roundToPx()),
+) {
+    OmMenuItem("Rename", onClick = { open = false })
+    OmMenuItem("Delete", onClick = { open = false }, destructive = true)
+}
+```
+
 ---
 
 ## 5. Theming
@@ -438,7 +469,7 @@ A prebuilt APK is attached to each [release](https://github.com/Jeta1me1PLUS/Ope
 
 ```text
 omui-core/         tokens, theme, interaction primitives, grid layout
-omui-components/   42 components
+omui-components/   46 components
 omui-icons/        13 geometric icons
 omui-test/         OmCheck design-spec validation
 sample/            five-page demo
@@ -454,6 +485,7 @@ smoke/             consumes the published artifact via Maven coordinates only
 - `OmTag` delete button has a 28dp hit area, below the 48dp guideline
 - `OmSheet` only expands from its handle, not from the content area
 - `OmCard` Ink variant changes only the background; text color is the caller's job
+- `OmMenu` does not flip near screen edges; pass a negative offset when anchored near the bottom
 - RTL and TalkBack have not been systematically audited
 
 ---
