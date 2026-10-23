@@ -16,7 +16,7 @@ A Jetpack Compose UI library that fuses **Metro tiles** with **Swiss Internation
   </tr>
 </table>
 
-38 components, verified on device. Requires minSdk 24 and Compose 1.11.4+.
+42 components, verified on device. Requires minSdk 24 and Compose 1.11.4+.
 
 ---
 
@@ -44,7 +44,7 @@ Spectrum tiles are opt-in. The eight hues share fixed lightness and chroma in OK
 ### 2.1 Maven Central
 
 ```kotlin
-implementation("io.github.jeta1me1plus:omui-components:0.10.10")
+implementation("io.github.jeta1me1plus:omui-components:0.11.0")
 ```
 
 No extra repository config needed. Verified by resolving the published artifact with `mavenCentral()` only.
@@ -131,7 +131,7 @@ Three rules:
 | Navigation | `OmTopBar` `OmCollapsingTopBar` `OmPivot` `OmBottomBar` `OmRail` `OmDrawer` |
 | Tiles | `OmTile` `OmTileGrid` |
 | Content | `OmCard` `OmList` `OmListItem` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmAccordion` `OmPager` `OmPagerIndicator` |
-| Inputs | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` |
+| Inputs | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` `OmSegmentedControl` `OmStepperInput` `OmDropdown` `OmDatePicker` |
 | Feedback | `OmProgressBar` `OmProgressRing` `OmSkeleton` `OmSnackbar` |
 | Overlays | `OmDialog` `OmSheet` |
 | Primitives | `Modifier.omClickable` `Modifier.omFocusRing` |
@@ -248,6 +248,27 @@ OmCheckbox(checked = agree, onCheckedChange = { agree = it }, label = "Weekly di
 OmRadio(selected = choice == 1, onClick = { choice = 1 }, label = "Option one")
 OmSwitch(checked = notify, onCheckedChange = { notify = it })
 OmSlider(value = level, onValueChange = { level = it })
+```
+
+<img src="images/13-controls.png" width="240" />
+<img src="images/14-datepicker.png" width="240" />
+
+```kotlin
+OmSegmentedControl(
+    options = listOf("Day", "Week", "Month"),
+    selectedIndex = segment,
+    onSelect = { segment = it },
+)
+
+OmStepperInput(value = count, onValueChange = { count = it }, min = 1, max = 9)
+
+OmDropdown(
+    options = listOf("Paper", "Ink", "Spectrum"),
+    selectedIndex = choice,
+    onSelect = { choice = it },
+)
+
+OmDatePicker(selected = date, onSelect = { date = it })
 ```
 
 ### 4.6 Feedback
@@ -417,7 +438,7 @@ A prebuilt APK is attached to each [release](https://github.com/Jeta1me1PLUS/Ope
 
 ```text
 omui-core/         tokens, theme, interaction primitives, grid layout
-omui-components/   38 components
+omui-components/   42 components
 omui-icons/        13 geometric icons
 omui-test/         OmCheck design-spec validation
 sample/            five-page demo

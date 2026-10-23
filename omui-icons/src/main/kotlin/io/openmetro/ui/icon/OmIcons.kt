@@ -148,6 +148,23 @@ object OmIcons {
             lineTo(13f, 17f)
         }
     }
+
+    /** 向下箭头，用于下拉选择。 */
+    val ChevronDown: ImageVector by lazy {
+        strokeIcon("Om.ChevronDown") {
+            moveTo(6f, 9f)
+            lineTo(12f, 15f)
+            lineTo(18f, 9f)
+        }
+    }
+
+    /** 一条横线，用于数值增减的减号。 */
+    val Minus: ImageVector by lazy {
+        strokeIcon("Om.Minus") {
+            moveTo(5f, 12f)
+            lineTo(19f, 12f)
+        }
+    }
 }
 
 private fun PathBuilder.squareOutline(x: Float, y: Float, size: Float) {

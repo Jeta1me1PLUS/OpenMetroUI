@@ -2,6 +2,26 @@
 
 按版本倒序，只列改了什么。
 
+## v0.11.0 · 2026-10-23
+
+补齐表单类组件，总数 38 → 42。
+
+### 新增
+
+- `OmSegmentedControl`：等分固定宽度的互斥选项，选中段整块填 accent，段间 1dp 竖线；与 `OmPivot` 的区别是强制等分、不滚动。
+- `OmStepperInput`：两侧 48dp 方形按钮夹一个数字，到边界时按钮变灰而非回绕。
+- `OmDropdown`：触发区用填充变体形态，面板贴在下方、宽度对齐触发区；用 `Popup` 而不是 `Dialog`。选中项沿用列表的 `accentQuiet` + 3dp 竖条。
+- `OmDatePicker` + `OmDate`：7 列月历，选中为 accent 实心方块，今天为 2dp 描边。用 `Calendar` 而非 `java.time`，避免引入 desugaring。
+- `OmIcons.ChevronDown` / `OmIcons.Minus`（图标共 15 个）。
+
+### 变更
+
+- `versionCode` 规则改为 `MINOR * 100 + PATCH`（0.11.0 → 1100）。旧规则 `MINOR + PATCH` 在 0.11.0 会算出 11，小于 0.10.10 的 20，不满足单调递增。
+
+### 未验证
+
+- 下拉面板在长列表中的定位、日期选择器的跨月切换、分段控件在超长文案下的表现。
+
 ## v0.10.10 · 2026-10-23
 
 ### 新增

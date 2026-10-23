@@ -16,7 +16,7 @@
   </tr>
 </table>
 
-38 个组件，已在真机走查。要求 minSdk 24、Compose 1.11.4 以上。
+42 个组件，已在真机走查。要求 minSdk 24、Compose 1.11.4 以上。
 
 ---
 
@@ -44,7 +44,7 @@ Metro 和瑞士国际主义有共同的底子：扁平、无衬线、网格、�
 ### 2.1 Maven Central
 
 ```kotlin
-implementation("io.github.jeta1me1plus:omui-components:0.10.10")
+implementation("io.github.jeta1me1plus:omui-components:0.11.0")
 ```
 
 不需要额外仓库配置。已用只配 `mavenCentral()` 的消费者验证过，能正常解析。
@@ -131,7 +131,7 @@ setContent {
 | 导航 | `OmTopBar` `OmCollapsingTopBar` `OmPivot` `OmBottomBar` `OmRail` `OmDrawer` |
 | 磁贴 | `OmTile` `OmTileGrid` |
 | 内容 | `OmCard` `OmList` `OmListItem` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmAccordion` `OmPager` `OmPagerIndicator` |
-| 输入 | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` |
+| 输入 | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` `OmSegmentedControl` `OmStepperInput` `OmDropdown` `OmDatePicker` |
 | 反馈 | `OmProgressBar` `OmProgressRing` `OmSkeleton` `OmSnackbar` |
 | 浮层 | `OmDialog` `OmSheet` |
 | 原语 | `Modifier.omClickable` `Modifier.omFocusRing` |
@@ -248,6 +248,27 @@ OmCheckbox(checked = agree, onCheckedChange = { agree = it }, label = "接收每
 OmRadio(selected = choice == 1, onClick = { choice = 1 }, label = "选项一")
 OmSwitch(checked = notify, onCheckedChange = { notify = it })
 OmSlider(value = level, onValueChange = { level = it })
+```
+
+<img src="images/13-controls.png" width="240" />
+<img src="images/14-datepicker.png" width="240" />
+
+```kotlin
+OmSegmentedControl(
+    options = listOf("日", "周", "月"),
+    selectedIndex = segment,
+    onSelect = { segment = it },
+)
+
+OmStepperInput(value = count, onValueChange = { count = it }, min = 1, max = 9)
+
+OmDropdown(
+    options = listOf("Paper", "Ink", "Spectrum"),
+    selectedIndex = choice,
+    onSelect = { choice = it },
+)
+
+OmDatePicker(selected = date, onSelect = { date = it })
 ```
 
 ### 4.6 反馈
@@ -417,7 +438,7 @@ fun `配色符合规范`() {
 
 ```text
 omui-core/         token、主题、交互原语、栅格布局
-omui-components/   38 个组件
+omui-components/   42 个组件
 omui-icons/        13 个几何图标
 omui-test/         OmCheck 设计约束校验
 sample/            五页 demo

@@ -51,6 +51,11 @@ import io.openmetro.ui.component.feedback.OmProgressRing
 import io.openmetro.ui.component.feedback.OmSkeleton
 import io.openmetro.ui.component.feedback.OmSnackbar
 import io.openmetro.ui.component.input.OmCheckbox
+import io.openmetro.ui.component.input.OmDatePicker
+import io.openmetro.ui.component.input.OmDate
+import io.openmetro.ui.component.input.OmDropdown
+import io.openmetro.ui.component.input.OmSegmentedControl
+import io.openmetro.ui.component.input.OmStepperInput
 import io.openmetro.ui.component.input.OmRadio
 import io.openmetro.ui.component.input.OmSearchField
 import io.openmetro.ui.component.input.OmSlider
@@ -88,6 +93,10 @@ fun GalleryScreen() {
     var sheetVisible by remember { mutableStateOf(false) }
     var search by remember { mutableStateOf("") }
     var snackbarVisible by remember { mutableStateOf(false) }
+    var segment by remember { mutableIntStateOf(0) }
+    var count by remember { mutableIntStateOf(1) }
+    var dropdownIndex by remember { mutableIntStateOf(0) }
+    var date by remember { mutableStateOf<OmDate?>(null) }
     var drawerVisible by remember { mutableStateOf(false) }
     var railIndex by remember { mutableIntStateOf(0) }
 
@@ -446,6 +455,34 @@ fun GalleryScreen() {
             OmProgressRing(progress = null)
             OmProgressRing(progress = 1f, size = 56.dp, strokeWidth = 6.dp)
         }
+
+        SubTitle("Segmented / Stepper")
+        OmSegmentedControl(
+            options = listOf("日", "周", "月"),
+            selectedIndex = segment,
+            onSelect = { segment = it },
+        )
+        Spacer(Modifier.height(spacing.space3))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            OmText("数量", style = typography.bodyM, modifier = Modifier.weight(1f))
+            OmStepperInput(
+                value = count,
+                onValueChange = { count = it },
+                min = 1,
+                max = 9,
+                modifier = Modifier.width(160.dp),
+            )
+        }
+
+        SubTitle("Dropdown")
+        OmDropdown(
+            options = listOf("Paper", "Ink", "Spectrum"),
+            selectedIndex = dropdownIndex,
+            onSelect = { dropdownIndex = it },
+        )
+
+        SubTitle("Date")
+        OmDatePicker(selected = date, onSelect = { date = it })
     }
 
     OmSection(label = "TAG / AVATAR") {
