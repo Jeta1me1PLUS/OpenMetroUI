@@ -395,6 +395,7 @@ OmMenu(
 <img src="images/17-staggered.png" width="240" />
 <img src="images/18-otp.png" width="240" />
 <img src="images/19-banner.png" width="240" />
+<img src="images/23-swipe.png" width="240" />
 
 ```kotlin
 OmBanner(

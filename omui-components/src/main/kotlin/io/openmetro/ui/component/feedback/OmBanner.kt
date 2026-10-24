@@ -2,6 +2,7 @@ package io.openmetro.ui.component.feedback
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -77,7 +78,8 @@ fun OmBanner(
 
         if (actionLabel != null && onAction != null) {
             Spacer(Modifier.width(spacing.space3))
-            Box(
+            // 必须是 Column：Box 是叠放，文字和下划线会重叠在一起
+            Column(
                 modifier = Modifier
                     .omClickable(role = Role.Button, onClick = onAction)
                     .padding(horizontal = spacing.space2, vertical = spacing.space1),
