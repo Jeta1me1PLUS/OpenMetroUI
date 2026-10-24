@@ -16,7 +16,7 @@ A Jetpack Compose UI library that fuses **Metro tiles** with **Swiss Internation
   </tr>
 </table>
 
-53 components, verified on device. Requires minSdk 24 and Compose 1.11.4+.
+56 components, verified on device. Requires minSdk 24 and Compose 1.11.4+.
 
 ---
 
@@ -130,8 +130,8 @@ Three rules:
 | Layout | `OmScreen` `OmSection` `OmGrid` `Modifier.omGridSpan` |
 | Navigation | `OmTopBar` `OmCollapsingTopBar` `OmPivot` `OmBottomBar` `OmRail` `OmDrawer` |
 | Tiles | `OmTile` `OmTileGrid` |
-| Content | `OmCard` `OmList` `OmListItem` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmErrorState` `OmAccordion` `OmPager` `OmPagerIndicator` `OmStat` `OmSparkline` `OmTable` `OmSwipeToDismiss` |
-| Inputs | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` `OmSegmentedControl` `OmStepperInput` `OmDropdown` `OmDatePicker` `OmOtpInput` |
+| Content | `OmCard` `OmList` `OmListItem` `OmListSection` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmErrorState` `OmAccordion` `OmPager` `OmPagerIndicator` `OmStat` `OmSparkline` `OmTable` `OmTimeline` `OmSwipeToDismiss` |
+| Inputs | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` `OmSegmentedControl` `OmStepperInput` `OmDropdown` `OmDatePicker` `OmOtpInput` `OmChipInput` |
 | Feedback | `OmProgressBar` `OmProgressRing` `OmSkeleton` `OmSnackbar` `OmBanner` |
 | Overlays | `OmDialog` `OmSheet` `OmSideSheet` `OmMenu` |
 | Primitives | `Modifier.omClickable` `Modifier.omFocusRing` |
@@ -238,6 +238,8 @@ OmTileGrid(columns = 4, gutter = 8.dp) {
 ```
 
 A non-null `backTitle` enables a Y-axis flip on tap. The back face must carry information, not just an animation.
+
+Pass `rotatingTitles` to turn it into a Live Tile: the front title cycles every 8 seconds by default, independent of the flip.
 
 ### 4.5 Forms
 
@@ -426,6 +428,27 @@ OmResponsivePane(
 OmSideSheet(visible = open, onDismiss = { open = false }) { /* content */ }
 ```
 
+
+<img src="images/21-timeline.png" width="240" />
+<img src="images/22-chipinput.png" width="240" />
+
+```kotlin
+OmListSection("Notifications") {
+    OmListItem("Push", trailing = { OmSwitch(checked = on, onCheckedChange = { }) })
+    OmListItem("Email", trailing = { OmSwitch(checked = off, onCheckedChange = { }) })
+}
+
+OmTimeline(
+    items = listOf(
+        OmTimelineItem("Order placed", time = "09:20", description = "Waiting for confirmation"),
+        OmTimelineItem("Shipped", time = "14:05", current = true),
+        OmTimelineItem("Delivered", time = "Tomorrow"),
+    ),
+)
+
+OmChipInput(values = tags, onValuesChange = { tags = it })
+```
+
 ---
 
 ## 5. Theming
@@ -508,7 +531,7 @@ A prebuilt APK is attached to each [release](https://github.com/Jeta1me1PLUS/Ope
 
 ```text
 omui-core/         tokens, theme, interaction primitives, grid layout
-omui-components/   53 components
+omui-components/   56 components
 omui-icons/        13 geometric icons
 omui-test/         OmCheck design-spec validation
 sample/            five-page demo

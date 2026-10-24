@@ -1,5 +1,8 @@
 package io.openmetro.sample
 
+import io.openmetro.ui.component.input.OmChipInput
+import io.openmetro.ui.component.content.OmTimeline
+import io.openmetro.ui.component.content.OmTimelineItem
 import io.openmetro.ui.component.feedback.OmBanner
 import io.openmetro.ui.component.feedback.OmBannerTone
 import io.openmetro.ui.component.content.OmErrorState
@@ -118,6 +121,7 @@ fun GalleryScreen() {
     var otp by remember { mutableStateOf("") }
     var sideSheetVisible by remember { mutableStateOf(false) }
     var bannerVisible by remember { mutableStateOf(true) }
+    var tags by remember { mutableStateOf(listOf("设计", "排版")) }
     var drawerVisible by remember { mutableStateOf(false) }
     var railIndex by remember { mutableIntStateOf(0) }
 
@@ -415,6 +419,14 @@ fun GalleryScreen() {
                 label = "NOW PLAYING",
                 tone = OmTileTone.Ink,
             )
+            OmTile(
+                title = "轮播",
+                modifier = Modifier.omGridSpan(2).aspectRatio(1f),
+                label = "LIVE TILE",
+                tone = OmTileTone.Quiet,
+                rotatingTitles = listOf("3 封未读", "2 个日程", "1 条提醒"),
+                rotateIntervalMillis = 2500,
+            )
         }
 
         SubTitle("Spectrum 四色")
@@ -526,6 +538,9 @@ fun GalleryScreen() {
 
         SubTitle("OTP")
         OmOtpInput(value = otp, onValueChange = { otp = it })
+
+        SubTitle("Chip input")
+        OmChipInput(values = tags, onValuesChange = { tags = it })
     }
 
     OmSection(label = "DATA / 数据") {
@@ -562,6 +577,15 @@ fun GalleryScreen() {
                 listOf("归档", "2,041", "正常"),
             ),
             onRowClick = {},
+        )
+
+        SubTitle("Timeline")
+        OmTimeline(
+            items = listOf(
+                OmTimelineItem("提交订单", time = "09:20", description = "等待商家确认"),
+                OmTimelineItem("已发货", time = "14:05", current = true),
+                OmTimelineItem("已送达", time = "预计明天"),
+            ),
         )
 
         SubTitle("Menu")

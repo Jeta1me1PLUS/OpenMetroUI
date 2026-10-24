@@ -16,7 +16,7 @@
   </tr>
 </table>
 
-53 个组件，已在真机走查。要求 minSdk 24、Compose 1.11.4 以上。
+56 个组件，已在真机走查。要求 minSdk 24、Compose 1.11.4 以上。
 
 ---
 
@@ -130,8 +130,8 @@ setContent {
 | 布局 | `OmScreen` `OmSection` `OmGrid` `Modifier.omGridSpan` |
 | 导航 | `OmTopBar` `OmCollapsingTopBar` `OmPivot` `OmBottomBar` `OmRail` `OmDrawer` |
 | 磁贴 | `OmTile` `OmTileGrid` |
-| 内容 | `OmCard` `OmList` `OmListItem` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmErrorState` `OmAccordion` `OmPager` `OmPagerIndicator` `OmStat` `OmSparkline` `OmTable` `OmSwipeToDismiss` |
-| 输入 | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` `OmSegmentedControl` `OmStepperInput` `OmDropdown` `OmDatePicker` `OmOtpInput` |
+| 内容 | `OmCard` `OmList` `OmListItem` `OmListSection` `OmTag` `OmAvatar` `OmBadge` `OmTooltip` `OmEmptyState` `OmErrorState` `OmAccordion` `OmPager` `OmPagerIndicator` `OmStat` `OmSparkline` `OmTable` `OmTimeline` `OmSwipeToDismiss` |
+| 输入 | `OmTextField` `OmSearchField` `OmCheckbox` `OmRadio` `OmSwitch` `OmSlider` `OmSegmentedControl` `OmStepperInput` `OmDropdown` `OmDatePicker` `OmOtpInput` `OmChipInput` |
 | 反馈 | `OmProgressBar` `OmProgressRing` `OmSkeleton` `OmSnackbar` `OmBanner` |
 | 浮层 | `OmDialog` `OmSheet` `OmSideSheet` `OmMenu` |
 | 原语 | `Modifier.omClickable` `Modifier.omFocusRing` |
@@ -238,6 +238,8 @@ OmTileGrid(columns = 4, gutter = 8.dp) {
 ```
 
 `backTitle` 非空时点击绕 Y 轴翻转。背面必须承载信息，不能只是一个动画。
+
+传 `rotatingTitles` 可以变成 Live Tile：正面标题按固定间隔轮播（默认 8 秒），与翻面互不干扰。
 
 ### 4.5 表单控件
 
@@ -426,6 +428,27 @@ OmResponsivePane(
 OmSideSheet(visible = open, onDismiss = { open = false }) { /* 内容 */ }
 ```
 
+
+<img src="images/21-timeline.png" width="240" />
+<img src="images/22-chipinput.png" width="240" />
+
+```kotlin
+OmListSection("通知") {
+    OmListItem("推送", trailing = { OmSwitch(checked = on, onCheckedChange = { }) })
+    OmListItem("邮件", trailing = { OmSwitch(checked = off, onCheckedChange = { }) })
+}
+
+OmTimeline(
+    items = listOf(
+        OmTimelineItem("提交订单", time = "09:20", description = "等待商家确认"),
+        OmTimelineItem("已发货", time = "14:05", current = true),
+        OmTimelineItem("已送达", time = "预计明天"),
+    ),
+)
+
+OmChipInput(values = tags, onValuesChange = { tags = it })
+```
+
 ---
 
 ## 5. 主题
@@ -508,7 +531,7 @@ fun `配色符合规范`() {
 
 ```text
 omui-core/         token、主题、交互原语、栅格布局
-omui-components/   53 个组件
+omui-components/   56 个组件
 omui-icons/        13 个几何图标
 omui-test/         OmCheck 设计约束校验
 sample/            五页 demo

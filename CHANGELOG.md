@@ -2,6 +2,26 @@
 
 按版本倒序，只列改了什么。
 
+## v0.14.0 · 2026-10-24
+
+新增三个组件与磁贴轮播，总数 53 → 56。
+
+### 新增
+
+- `OmListSection`：全大写小标题 + 一组行 + 组间留白，统一设置页的分组节奏。
+- `OmTimeline` + `OmTimelineItem`：2dp 竖线 + 方形节点，当前项为实心 accent，首尾不露出线头。
+- `OmChipInput`：已提交的值显示为可删除标签，`FlowRow` 自动换行，回车提交、重复值忽略。
+- `OmTile` 的 `rotatingTitles`：Live Tile 内容轮播，默认每 8 秒换一条，与翻面互不干扰。
+
+### 修复
+
+- `OmListSection` 的 `modifier` 位置不符合 Compose 规范（应是第一个可选参数），把 `title` 改为必填。
+
+### 未验证
+
+- Live Tile 轮播与翻面同时启用时的观感
+- `OmChipInput` 在输入法弹起时的换行表现
+
 ## v0.13.0 · 2026-10-23
 
 交互与布局两批一起做，总数 46 → 53。
