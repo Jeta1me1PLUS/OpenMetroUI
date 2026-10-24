@@ -69,6 +69,8 @@ fun OmSwipeToDismiss(
         Box(
             modifier = Modifier
                 .offset { IntOffset(offsetX.roundToInt(), 0) }
+                // 必须有不透明底色，否则下面的删除区会透出来 —— 看上去像「一直显示」
+                .background(colors.background)
                 .draggable(
                     orientation = Orientation.Horizontal,
                     state = rememberDraggableState { delta ->
