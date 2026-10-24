@@ -144,7 +144,12 @@ tasks.register<org.gradle.api.tasks.bundling.Zip>("bundleForCentral") {
     group = "publishing"
     description = "把 build/central-repo 打成可上传到 Central Portal 的 zip"
     dependsOn("publishToCentral")
-    archiveFileName.set("openmetroui-${providers.gradleProperty("OM_VERSION").get()}.zip")
+    val currentVersion = providers.gradleProperty("OM_VERSION").get()
+    archiveFileName.set("openmetroui-$currentVersion.zip")
     destinationDirectory.set(layout.buildDirectory.dir("central-bundle"))
-    from(layout.buildDirectory.dir("central-repo"))
+    // central-repo 会累积所有历史版本，这里只打包当前版本，
+    // 否则 bundle 会越来越大，也容易把已发布的旧版本重复提交
+    from(layout.buildDirectory.dir("central-repo")) {
+        include("io/github/jeta1me1plus/*/$currentVersion/**")
+    }
 }
