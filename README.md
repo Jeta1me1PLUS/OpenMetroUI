@@ -188,6 +188,7 @@ OmSearchField(value = query, onValueChange = { query = it })
 `OmList` inserts hairlines between items and skips the last one. Selection is a 3dp accent bar drawn behind the row, so it never shifts the text.
 
 <img src="images/06-list.png" width="240" />
+<img src="images/24-selected.png" width="240" />
 <img src="images/08-cards.png" width="240" />
 
 ```kotlin

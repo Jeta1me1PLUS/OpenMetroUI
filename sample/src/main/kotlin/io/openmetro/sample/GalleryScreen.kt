@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -122,6 +123,8 @@ fun GalleryScreen() {
     var sideSheetVisible by remember { mutableStateOf(false) }
     var bannerVisible by remember { mutableStateOf(true) }
     var tags by remember { mutableStateOf(listOf("设计", "排版")) }
+    var swipeRows by remember { mutableStateOf(listOf("条目一", "条目二")) }
+    var errorBannerVisible by remember { mutableStateOf(true) }
     var drawerVisible by remember { mutableStateOf(false) }
     var railIndex by remember { mutableIntStateOf(0) }
 
@@ -388,12 +391,23 @@ fun GalleryScreen() {
         OmListItem(title = "禁用项", subtitle = "不可点，文字降为 38%", enabled = false)
 
         SubTitle("左滑删除")
-        OmSwipeToDismiss(onDismiss = {}) {
-            OmListItem(
-                title = "向左滑动露出删除区",
-                subtitle = "拖过 60% 触发，否则回弹",
-                onClick = {},
+        if (swipeRows.isEmpty()) {
+            OmText(
+                text = "都删掉了。重新进入本页可恢复。",
+                style = typography.caption,
+                color = colors.textSecondary,
             )
+        }
+        swipeRows.forEach { row ->
+            key(row) {
+                OmSwipeToDismiss(onDismiss = { swipeRows = swipeRows - row }) {
+                    OmListItem(
+                        title = row,
+                        subtitle = "向左滑动露出删除区",
+                        onClick = {},
+                    )
+                }
+            }
         }
     }
 
@@ -676,12 +690,15 @@ fun GalleryScreen() {
             )
         }
         Spacer(Modifier.height(spacing.space2))
-        OmBanner(
-            text = "无法连接到服务器，请检查网络。",
-            tone = OmBannerTone.Error,
-            actionLabel = "重试",
-            onAction = {},
-        )
+        if (errorBannerVisible) {
+            OmBanner(
+                text = "无法连接到服务器，请检查网络。",
+                tone = OmBannerTone.Error,
+                actionLabel = "重试",
+                onAction = {},
+                onDismiss = { errorBannerVisible = false },
+            )
+        }
 
         SubTitle("Error state")
         OmErrorState(

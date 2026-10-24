@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
@@ -53,7 +54,8 @@ fun <T> OmList(
  * 列表项：主文本 22sp/600 + 可选次级文本，贴齐网格、无左图标缩进。
  *
  * 选中态 = 整行 `accentQuiet` 底色 + start 侧 3dp accent 竖条。竖条用 `drawBehind`
- * 绘制，不占布局宽度 —— 否则选中与未选中的文字会差 3dp 而左右跳动。
+ * 画在容器左边界**之外**（也就是页边距里），既不占布局宽度、不引起文字跳动，
+ * 也不会盖住文字。因此外层容器必须留出至少 3dp 的左边距（`OmScreen` 默认有 16dp）。
  *
  * 高度由内容决定，最小 56dp；分隔线由 [OmList] 负责，本组件不画。
  */
@@ -86,9 +88,13 @@ fun OmListItem(
             .background(if (selected) colors.accentQuiet else Color.Transparent)
             .drawBehind {
                 if (selected) {
+                    // 画到容器左边界之外（页边距里）：与文字留 7dp 呼吸，
+                    // 同时文字保持 flush-left 不被盖住、也不会因选中而跳动
+                    val barWidth = 3.dp.toPx()
                     drawRect(
                         color = colors.accent,
-                        size = Size(width = 3.dp.toPx(), height = size.height),
+                        topLeft = Offset(x = -barWidth - 7.dp.toPx(), y = 0f),
+                        size = Size(width = barWidth, height = size.height),
                     )
                 }
             }

@@ -188,6 +188,7 @@ OmSearchField(value = query, onValueChange = { query = it })
 `OmList` 在项之间插入 hairline，最后一项不画。选中态是 `drawBehind` 画的 3dp 强调条，不占布局宽度，文字不会横向跳。
 
 <img src="images/06-list.png" width="240" />
+<img src="images/24-selected.png" width="240" />
 <img src="images/08-cards.png" width="240" />
 
 ```kotlin
