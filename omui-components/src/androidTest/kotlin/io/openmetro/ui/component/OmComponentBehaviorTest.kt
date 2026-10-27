@@ -14,10 +14,8 @@ import androidx.compose.ui.test.junit4.v2.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performSemanticsAction
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
-import androidx.compose.ui.semantics.SemanticsActions
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.component.button.OmButton
@@ -102,9 +100,8 @@ class OmComponentBehaviorTest {
             )
         }
 
-        // 文字节点自身没有点击动作，要点到带 click action 的父容器
-        rule.onNode(hasText("Two") and hasClickAction())
-            .performSemanticsAction(SemanticsActions.OnClick)
+        // 修复前第二个页签被推出屏幕，点击无效；现在可以走正常的触摸路径
+        rule.onNode(hasText("Two") and hasClickAction()).performClick()
         rule.waitForIdle()
         assertEquals(1, selected)
     }

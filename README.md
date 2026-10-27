@@ -44,7 +44,7 @@ Spectrum tiles are opt-in. The eight hues share fixed lightness and chroma in OK
 ### 2.1 Maven Central
 
 ```kotlin
-implementation("io.github.jeta1me1plus:omui-components:0.17.2")
+implementation("io.github.jeta1me1plus:omui-components:0.17.3")
 ```
 
 No extra repository config needed. Verified by resolving the published artifact with `mavenCentral()` only.

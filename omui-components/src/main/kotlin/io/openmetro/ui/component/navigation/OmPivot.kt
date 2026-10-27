@@ -18,6 +18,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
@@ -51,6 +54,7 @@ fun OmPivot(
     val spacing = OmTheme.spacing
     val typography = OmTheme.typography
     val scope = rememberCoroutineScope()
+    val accentBar = OmTheme.shapes.accentBar
 
     // 单向：pager -> onSelect。点击走 scrollToPage，再由这里回流，不会形成循环。
     if (pagerState != null) {
@@ -83,7 +87,19 @@ fun OmPivot(
                             onSelect(index)
                         }
                     }
-                    .padding(top = spacing.space2),
+                    .padding(top = spacing.space2, bottom = accentBar)
+                    // 指示条画在自身底部，宽度等于文字宽度。
+                    // 不能用 fillMaxWidth 的子 Box —— 那会把整列撑到全宽，后面的页签被推出屏幕。
+                    .drawBehind {
+                        if (selected) {
+                            val bar = accentBar.toPx()
+                            drawRect(
+                                color = colors.accent,
+                                topLeft = Offset(0f, size.height - bar),
+                                size = Size(size.width, bar),
+                            )
+                        }
+                    },
             ) {
                 OmText(
                     text = tab,
@@ -93,12 +109,6 @@ fun OmPivot(
                     overflow = TextOverflow.Ellipsis,
                 )
                 Spacer(Modifier.height(spacing.space2))
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(OmTheme.shapes.accentBar)
-                        .background(if (selected) colors.accent else Color.Transparent),
-                )
             }
         }
     }
