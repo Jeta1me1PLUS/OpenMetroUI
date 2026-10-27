@@ -48,6 +48,7 @@ OpenMetroUI 一键编译 demo
 用法： ./build.sh [选项]
 
   （无选项）   跑单元测试 → 编译 debug → 归档为 OpenMetroUI-v<版本>-debug.apk → 删除更早的包
+  --verify     只检查版本号是否在所有该同步的地方都更新了（发版前跑）
   --release    编译 release（debug 签名、不混淆）。判断卡顿是否只是 debug 构建时用
   --clean      先执行 gradlew clean 再构建（怀疑增量构建漏编时用）
   --lint       同时跑各模块的 lint（慢十几秒，但能发现新增问题）
@@ -63,8 +64,10 @@ CLEAN=0
 RUN_LINT=0
 INSTALL=0
 BUILD_TYPE="debug"
+VERIFY_ONLY=0
 while [ ${#} -gt 0 ]; do
   case "${1}" in
+    --verify) VERIFY_ONLY=1 ;;
     --release) BUILD_TYPE="release" ;;
     --clean) CLEAN=1 ;;
     --lint) RUN_LINT=1 ;;
@@ -106,8 +109,57 @@ fi
 VERSION_NAME=$(awk -F'=' '/^[[:space:]]*OM_VERSION[[:space:]]*=/ { gsub(/[[:space:]]/, "", $2); print $2; exit }' "${PROPERTIES_FILE}")
 [ -n "${VERSION_NAME}" ] || die "没能从 ${PROPERTIES_FILE} 里读到 OM_VERSION"
 
+
+# ── 版本一致性检查 ──────────────────────────────────────────────
+# 发版要同步这几处，漏一处就会让 README 或 versionCode 与实际版本对不上。
+# 默认只警告；--verify 模式下有问题直接失败。
+verify_version() {
+  local problems=0
+  local minor patch expected actual readme
+
+  minor=$(printf '%s' "${VERSION_NAME}" | cut -d. -f2)
+  patch=$(printf '%s' "${VERSION_NAME}" | cut -d. -f3)
+  expected=$(( ${minor:-0} * 100 + ${patch:-0} ))
+  actual=$(grep -oE 'versionCode = [0-9]+' sample/build.gradle.kts | head -1 | grep -oE '[0-9]+')
+
+  ok() { printf '  %s✓%s %s\n' "${C_GREEN}" "${C_OFF}" "$1"; }
+  bad() { printf '  %s✗%s %s\n' "${C_RED}" "${C_OFF}" "$1"; problems=$((problems + 1)); }
+
+  if grep -q "^## v${VERSION_NAME}" CHANGELOG.md 2>/dev/null; then
+    ok "CHANGELOG 有 v${VERSION_NAME} 条目"
+  else
+    bad "CHANGELOG 缺 v${VERSION_NAME} 条目"
+  fi
+
+  for readme in README.md README.zh-CN.md; do
+    if grep -q "omui-components:${VERSION_NAME}" "${readme}" 2>/dev/null; then
+      ok "${readme} 的依赖坐标是 ${VERSION_NAME}"
+    else
+      bad "${readme} 的依赖坐标没跟上"
+    fi
+  done
+
+  if [ "${actual}" = "${expected}" ]; then
+    ok "versionCode = ${expected}（MINOR×100+PATCH）"
+  else
+    bad "versionCode 是 ${actual:-空}，应为 ${expected}"
+  fi
+
+  return "${problems}"
+}
+
 ARCHIVE="OpenMetroUI-v${VERSION_NAME}-${BUILD_TYPE}.apk"
 step "版本 ${VERSION_NAME}（${BUILD_TYPE}）"
+step "版本一致性检查"
+if ! verify_version; then
+  if [ "${VERIFY_ONLY}" = 1 ]; then
+    die "版本号有未同步的地方，见上方 ✗ 项"
+  fi
+  printf '%s  发版前请用 ./build.sh --verify 复查%s\n' "${C_YELLOW}" "${C_OFF}"
+fi
+if [ "${VERIFY_ONLY}" = 1 ]; then
+  exit 0
+fi
 
 # ── 构建 ────────────────────────────────────────────────────────
 if [ "${CLEAN}" = 1 ]; then
