@@ -44,7 +44,7 @@ Spectrum tiles are opt-in. The eight hues share fixed lightness and chroma in OK
 ### 2.1 Maven Central
 
 ```kotlin
-implementation("io.github.jeta1me1plus:omui-components:0.11.0")
+implementation("io.github.jeta1me1plus:omui-components:0.16.0")
 ```
 
 No extra repository config needed. Verified by resolving the published artifact with `mavenCentral()` only.
@@ -191,6 +191,7 @@ OmSearchField(value = query, onValueChange = { query = it })
 <img src="images/24-selected.png" width="240" />
 <img src="images/25-rtl.png" width="240" />
 <img src="images/08-cards.png" width="240" />
+<img src="images/27-card-ink.png" width="240" />
 
 ```kotlin
 OmList(items = rows, insetStart = 16.dp) { row ->
@@ -209,6 +210,8 @@ OmCard(variant = OmCardVariant.Outlined) {
     OmText("Body copy")
 }
 ```
+
+The `Ink` variant inverts the inner text and stroke colors automatically, so `OmText` inside it stays readable without passing `onInverse`.
 
 ### 4.4 Tiles
 
@@ -316,6 +319,7 @@ OmPivot(
     tabs = listOf("All", "Tech", "Design"),
     selectedIndex = tab,
     onSelect = { tab = it },
+    pagerState = pagerState,   // optional: syncs taps and swipes both ways
 )
 
 OmBottomBar(
@@ -358,13 +362,14 @@ OmSnackbar(
 )
 ```
 
-`OmSheet` drags from its 48dp handle only, leaving the content area free for its own scroll.
+`OmSheet` drags from its 48dp handle only by default, leaving the content area free for its own scroll. Pass `dragHandleOnly = false` when the content does not scroll.
 
 
 ### 4.9 Data
 
 <img src="images/15-data.png" width="240" />
 <img src="images/16-menu.png" width="240" />
+<img src="images/28-menu-flip.png" width="240" />
 
 ```kotlin
 OmStat(value = "1,284", label = "MONTHLY ACTIVE", delta = "+12%")
@@ -390,6 +395,8 @@ OmMenu(
     OmMenuItem("Delete", onClick = { open = false }, destructive = true)
 }
 ```
+
+Menus and dropdowns flip to the other side automatically when there is not enough room below, so a trigger near the bottom of the screen still shows the full panel.
 
 
 ### 4.10 Layout and extras
@@ -497,6 +504,13 @@ OmTheme(typography = OmTypography.System.withFontFamily(myFontFamily)) { ... }
 
 If you need rounded cards, FABs, ripples or gradients, this library does not provide them and will not add them.
 
+### Accessibility
+
+- **RTL**: every decoration drawn with `drawBehind` mirrors with `LayoutDirection`; swipe-to-dismiss becomes right-swipe. Layout mirrors automatically because it uses `start`/`end`.
+- **Screen readers**: snackbars and banners announce through `liveRegion`; progress components report `progressBarRangeInfo`; swipe-to-dismiss exposes a custom accessibility action.
+- **Touch targets**: 48dp minimum. `OmTag` keeps a 28dp visual but occupies 48dp.
+- **Reduced motion**: `OmMotion` follows the system animator duration scale; setting it to 0 makes every animation instant.
+
 ---
 
 ## 7. Validating your colors
@@ -548,7 +562,6 @@ smoke/             consumes the published artifact via Maven coordinates only
 
 ## 10. Known limitations
 
-- `OmTag` delete button has a 28dp hit area, below the 48dp guideline
 - `OmSheet` drags from its handle by default; pass `dragHandleOnly = false` when the content does not scroll
 - RTL is supported; TalkBack has basic semantics but has not been audited with a screen reader
 

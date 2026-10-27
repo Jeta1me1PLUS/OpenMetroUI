@@ -44,7 +44,7 @@ Metro 和瑞士国际主义有共同的底子：扁平、无衬线、网格、�
 ### 2.1 Maven Central
 
 ```kotlin
-implementation("io.github.jeta1me1plus:omui-components:0.11.0")
+implementation("io.github.jeta1me1plus:omui-components:0.16.0")
 ```
 
 不需要额外仓库配置。已用只配 `mavenCentral()` 的消费者验证过，能正常解析。
@@ -191,6 +191,7 @@ OmSearchField(value = query, onValueChange = { query = it })
 <img src="images/24-selected.png" width="240" />
 <img src="images/25-rtl.png" width="240" />
 <img src="images/08-cards.png" width="240" />
+<img src="images/27-card-ink.png" width="240" />
 
 ```kotlin
 OmList(items = rows, insetStart = 16.dp) { row ->
@@ -209,6 +210,8 @@ OmCard(variant = OmCardVariant.Outlined) {
     OmText("正文内容")
 }
 ```
+
+`Ink` 变体会自动把内部文字与描边翻成浅色，放 `OmText` 进去不必手动传 `onInverse`。
 
 ### 4.4 磁贴
 
@@ -316,6 +319,7 @@ OmPivot(
     tabs = listOf("全部", "科技", "设计"),
     selectedIndex = tab,
     onSelect = { tab = it },
+    pagerState = pagerState,   // 可选：点击与滑动双向同步
 )
 
 OmBottomBar(
@@ -358,13 +362,14 @@ OmSnackbar(
 )
 ```
 
-`OmSheet` 只从顶部 48dp 手柄拖动，内容区留给自己的滚动。
+`OmSheet` 默认只从顶部 48dp 手柄拖动，内容区留给自己的滚动；内容不滚动时可传 `dragHandleOnly = false` 让整块面板都能拖。
 
 
 ### 4.9 数据
 
 <img src="images/15-data.png" width="240" />
 <img src="images/16-menu.png" width="240" />
+<img src="images/28-menu-flip.png" width="240" />
 
 ```kotlin
 OmStat(value = "1,284", label = "MONTHLY ACTIVE", delta = "+12%")
@@ -390,6 +395,8 @@ OmMenu(
     OmMenuItem("删除", onClick = { open = false }, destructive = true)
 }
 ```
+
+菜单与下拉在下方空间不足时会自动翻到上方，靠近屏幕底部的触发点也能看到完整面板。
 
 
 ### 4.10 布局与补充
@@ -497,6 +504,13 @@ OmTheme(typography = OmTypography.System.withFontFamily(myFontFamily)) { ... }
 
 需要圆角卡片、悬浮按钮、水波纹、渐变背景的话，这个库不提供，也不会加。
 
+### 无障碍
+
+- **RTL**：所有 `drawBehind` 画的装饰都跟随 `LayoutDirection` 镜像，左滑删除变成右滑。布局层面用 `start` / `end`，本来就自动翻转。
+- **读屏**：提示条通过 `liveRegion` 播报；进度组件报告 `progressBarRangeInfo`；左滑删除提供等价的自定义操作。
+- **触摸目标**：最小 48dp。`OmTag` 视觉仍是 28dp，但整块占 48dp。
+- **减弱动效**：`OmMotion` 跟随系统的动画时长缩放，设为 0 时所有动效瞬时完成。
+
 ---
 
 ## 7. 校验配色
@@ -548,9 +562,8 @@ smoke/             只用 Maven 坐标消费发布产物，验证其完整可用
 
 ## 10. 已知限制
 
-- `OmTag` 删除按钮命中区 28dp，低于 48dp 常规下限
 - `OmSheet` 默认只从手柄拖；内容不滚动时可传 `dragHandleOnly = false`
-- RTL 已支持；TalkBack 有基础语义，但还没用读屏实际走查过
+- TalkBack 有基础语义，但还没用读屏实际走查过
 
 ---
 
