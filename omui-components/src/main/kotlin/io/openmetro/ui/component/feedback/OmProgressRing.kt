@@ -16,6 +16,9 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.progressBarRangeInfo
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.openmetro.ui.core.theme.OmTheme
 
@@ -46,7 +49,16 @@ fun OmProgressRing(
         label = "omProgressRingSpin",
     )
 
-    Canvas(modifier.size(size)) {
+    Canvas(
+        modifier = modifier
+            .size(size)
+            .semantics {
+                val value = progress
+                if (value != null) {
+                    progressBarRangeInfo = ProgressBarRangeInfo(value.coerceIn(0f, 1f), 0f..1f)
+                }
+            },
+    ) {
         val stroke = strokeWidth.toPx()
         val diameter = this.size.minDimension - stroke
         val topLeft = Offset(stroke / 2f, stroke / 2f)

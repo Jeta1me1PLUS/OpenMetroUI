@@ -14,13 +14,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.core.interaction.omClickable
+import io.openmetro.ui.core.interaction.rememberIsRtl
 import io.openmetro.ui.core.theme.OmTheme
 
 /**
@@ -41,6 +46,7 @@ fun OmSnackbar(
     onAction: (() -> Unit)? = null,
 ) {
     val colors = OmTheme.colors
+    val rtl = rememberIsRtl()
     val spacing = OmTheme.spacing
     val typography = OmTheme.typography
     val motion = OmTheme.motion
@@ -60,8 +66,14 @@ fun OmSnackbar(
                 translationY = (1f - progress) * 24.dp.toPx()
             }
             .background(colors.inverseSurface)
+            .semantics { liveRegion = LiveRegionMode.Polite }
             .drawBehind {
-                drawRect(color = colors.accent, size = Size(4.dp.toPx(), size.height))
+                val barWidth = 4.dp.toPx()
+                drawRect(
+                    color = colors.accent,
+                    topLeft = Offset(if (rtl) size.width - barWidth else 0f, 0f),
+                    size = Size(barWidth, size.height),
+                )
             }
             .padding(
                 start = spacing.space4 + 4.dp,

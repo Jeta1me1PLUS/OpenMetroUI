@@ -2,6 +2,28 @@
 
 按版本倒序，只列改了什么。
 
+## v0.15.0 · 2026-10-27
+
+无障碍第一批：RTL、语义、触摸目标、动效降级。
+
+### 新增
+
+- RTL：5 处 `drawBehind` 装饰跟随 `LayoutDirection` 镜像（列表选中条、Banner / Snackbar 色条、Rail 与 Dropdown 的选中条）；`OmSwipeToDismiss` 在 RTL 下改为右滑、删除区移到左侧。
+- `OmMotion.scaledBy()`：`OmTheme` 读取系统的「动画时长缩放」，设为 0（减弱动态效果）时所有时长归零。
+- Lab 增加「强制从右往左」开关，可随时检查镜像。
+
+### 变更
+
+- `OmTag`：视觉仍是 28dp 薄片，**触控区改为 48dp** —— 整块占 48dp，背景与边框只画在垂直居中的 28dp 里，尾部 × 也拿到 48dp 见方。
+- `OmSnackbar` / `OmBanner`：加 `liveRegion`，出现时会被读屏朗读。
+- `OmProgressBar` / `OmProgressRing`：补 `progressBarRangeInfo`，读屏能报出百分比。
+- `OmSwipeToDismiss`：加自定义无障碍操作「删除」，TalkBack 用户不必执行滑动手势。
+
+### 未验证
+
+- TalkBack 的实际朗读顺序与措辞（需要真机开启读屏）
+- 系统「动画时长缩放」设为 0 时的观感
+
 ## v0.14.7 · 2026-10-24
 
 ### 修复

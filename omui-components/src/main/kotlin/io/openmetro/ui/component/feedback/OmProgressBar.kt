@@ -14,6 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.progressBarRangeInfo
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.openmetro.ui.core.theme.OmTheme
 
@@ -46,7 +49,14 @@ fun OmProgressBar(
     Canvas(
         modifier = modifier
             .fillMaxWidth()
-            .height(height),
+            .height(height)
+            // 读屏默认只会念「进度条」，把当前值补上才说得清「60%」
+            .semantics {
+                val value = progress
+                if (value != null) {
+                    progressBarRangeInfo = ProgressBarRangeInfo(value.coerceIn(0f, 1f), 0f..1f)
+                }
+            },
     ) {
         drawRect(color = colors.line)
 

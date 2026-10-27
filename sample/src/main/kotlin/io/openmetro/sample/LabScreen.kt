@@ -172,6 +172,19 @@ fun LabScreen(lab: LabSettings, onLabChange: (LabSettings) -> Unit) {
             )
         }
 
+        OmSection(label = "LAYOUT / 排版方向") {
+            OmListItem(
+                title = "强制从右往左",
+                subtitle = "检查选中竖条、色条、指示条是否镜像",
+                trailing = {
+                    OmSwitch(
+                        checked = lab.rtl,
+                        onCheckedChange = { onLabChange(lab.copy(rtl = it)) },
+                    )
+                },
+            )
+        }
+
         OmSection(label = "PREVIEW / 实时预览") {
             OmCard(variant = OmCardVariant.Flat) {
                 OmText("用当前参数渲染", style = typography.title)

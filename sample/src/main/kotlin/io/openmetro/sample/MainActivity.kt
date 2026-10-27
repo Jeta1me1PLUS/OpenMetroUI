@@ -14,6 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.platform.LocalLayoutDirection
 import io.openmetro.ui.core.theme.OmTheme
 
 class MainActivity : ComponentActivity() {
@@ -48,6 +50,11 @@ class MainActivity : ComponentActivity() {
                         density = density.density,
                         fontScale = lab.fontScale,
                     ),
+                    LocalLayoutDirection provides if (lab.rtl) {
+                        LayoutDirection.Rtl
+                    } else {
+                        LayoutDirection.Ltr
+                    },
                 ) {
                     SampleApp(lab = lab, onLabChange = { lab = it })
                 }

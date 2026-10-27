@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmDivider
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.core.interaction.omClickable
+import io.openmetro.ui.core.interaction.rememberIsRtl
 import io.openmetro.ui.core.interaction.omFocusRing
 import io.openmetro.ui.core.theme.OmTheme
 
@@ -70,6 +72,7 @@ fun OmListItem(
     onClick: (() -> Unit)? = null,
 ) {
     val colors = OmTheme.colors
+    val rtl = rememberIsRtl()
     val spacing = OmTheme.spacing
     val typography = OmTheme.typography
 
@@ -87,10 +90,12 @@ fun OmListItem(
             .background(if (selected) colors.accentQuiet else Color.Transparent)
             .drawBehind {
                 if (selected) {
-                    // 竖条贴在色块内部最左，与文字之间靠内边距留出 9dp
+                    // 竖条贴在色块 start 侧内缘，与文字之间靠内边距留出 9dp
+                    val barWidth = 3.dp.toPx()
                     drawRect(
                         color = colors.accent,
-                        size = Size(width = 3.dp.toPx(), height = size.height),
+                        topLeft = Offset(if (rtl) size.width - barWidth else 0f, 0f),
+                        size = Size(width = barWidth, height = size.height),
                     )
                 }
             }

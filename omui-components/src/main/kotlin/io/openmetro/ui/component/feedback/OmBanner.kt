@@ -13,13 +13,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmIcon
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.core.interaction.omClickable
+import io.openmetro.ui.core.interaction.rememberIsRtl
 import io.openmetro.ui.core.theme.OmTheme
 import io.openmetro.ui.icon.OmIcons
 
@@ -42,6 +47,7 @@ fun OmBanner(
     onDismiss: (() -> Unit)? = null,
 ) {
     val colors = OmTheme.colors
+    val rtl = rememberIsRtl()
     val spacing = OmTheme.spacing
     val typography = OmTheme.typography
 
@@ -59,8 +65,14 @@ fun OmBanner(
         modifier = modifier
             .fillMaxWidth()
             .background(background)
+            .semantics { liveRegion = LiveRegionMode.Polite }
             .drawBehind {
-                drawRect(color = accentColor, size = Size(4.dp.toPx(), size.height))
+                val barWidth = 4.dp.toPx()
+                drawRect(
+                    color = accentColor,
+                    topLeft = Offset(if (rtl) size.width - barWidth else 0f, 0f),
+                    size = Size(barWidth, size.height),
+                )
             }
             .padding(
                 start = spacing.space4,

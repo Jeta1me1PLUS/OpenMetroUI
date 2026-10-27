@@ -1,12 +1,12 @@
 package io.openmetro.ui.component.content
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -20,6 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.semantics.semantics
+import io.openmetro.ui.core.interaction.rememberIsRtl
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmText
@@ -41,15 +45,18 @@ fun OmSwipeToDismiss(
     content: @Composable () -> Unit,
 ) {
     val colors = OmTheme.colors
+    val rtl = rememberIsRtl()
     val density = LocalDensity.current
     val maxSwipe = with(density) { SwipeRevealWidth.toPx() }
 
     var offsetX by remember { mutableFloatStateOf(0f) }
 
     Box(modifier = modifier) {
-        // 删除区只占右侧，左侧露出的是父容器的底色而不是红色
-        Row(modifier = Modifier.matchParentSize()) {
-            Spacer(Modifier.weight(1f))
+        // Arrangement.End 会跟随 LayoutDirection：LTR 靠右、RTL 靠左
+        Row(
+            modifier = Modifier.matchParentSize(),
+            horizontalArrangement = Arrangement.End,
+        ) {
             Box(
                 modifier = Modifier
                     .width(SwipeRevealWidth)
@@ -68,14 +75,27 @@ fun OmSwipeToDismiss(
 
         Box(
             modifier = Modifier
-                .offset { IntOffset(offsetX.roundToInt(), 0) }
+                .offset {
+                    // offsetX 记的是「滑开距离」，始终为负；RTL 下要往右推
+                    IntOffset((if (rtl) -offsetX else offsetX).roundToInt(), 0)
+                }
                 // 必须有不透明底色，否则下面的删除区会透出来 —— 看上去像「一直显示」
                 .background(colors.background)
+                // TalkBack 用户没法执行滑动手势，给它一个等价的自定义操作
+                .semantics {
+                    customActions = listOf(
+                        CustomAccessibilityAction("删除") {
+                            onDismiss()
+                            true
+                        },
+                    )
+                }
                 .draggable(
                     orientation = Orientation.Horizontal,
                     state = rememberDraggableState { delta ->
                         // 必须同步更新：这里 launch 协程会让拖动完全跟不上手指
-                        offsetX = (offsetX + delta).coerceIn(-maxSwipe, 0f)
+                        val signed = if (rtl) -delta else delta
+                        offsetX = (offsetX + signed).coerceIn(-maxSwipe, 0f)
                     },
                     onDragStopped = {
                         if (offsetX <= -maxSwipe * 0.6f) {

@@ -21,6 +21,27 @@ class OmMotion(
     val decelerate: Easing = CubicBezierEasing(0f, 0f, 0f, 1f),
     val accelerate: Easing = CubicBezierEasing(0.3f, 0f, 1f, 1f),
 ) {
+    /**
+     * 按时长缩放系数生成一份副本，用于跟随系统的「动画时长缩放」设置。
+     *
+     * 系统把它设为 0（减弱动态效果 / 无障碍）时，所有时长归零，动画会瞬间完成。
+     * 系数大于 1 时不放大 —— 这个设置的语义是「减弱」而不是「加速」。
+     */
+    fun scaledBy(factor: Float): OmMotion {
+        if (factor >= 1f) return this
+        val f = factor.coerceIn(0f, 1f)
+        return OmMotion(
+            instant = (instant * f).toInt(),
+            fast = (fast * f).toInt(),
+            normal = (normal * f).toInt(),
+            slow = (slow * f).toInt(),
+            page = (page * f).toInt(),
+            standard = standard,
+            decelerate = decelerate,
+            accelerate = accelerate,
+        )
+    }
+
     companion object {
         val Default: OmMotion = OmMotion()
     }

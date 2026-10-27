@@ -189,6 +189,7 @@ OmSearchField(value = query, onValueChange = { query = it })
 
 <img src="images/06-list.png" width="240" />
 <img src="images/24-selected.png" width="240" />
+<img src="images/25-rtl.png" width="240" />
 <img src="images/08-cards.png" width="240" />
 
 ```kotlin
@@ -551,7 +552,7 @@ smoke/             只用 Maven 坐标消费发布产物，验证其完整可用
 - `OmSheet` 只能从手柄展开，不能从内容区上滑
 - `OmCard` 的 Ink 变体只换底色，文字颜色要调用方自己处理
 - `OmMenu` 不会在屏幕边缘自动翻转，靠近底部时需要传负的 offset
-- RTL 与 TalkBack 未做系统性走查
+- RTL 已支持；TalkBack 有基础语义，但还没用读屏实际走查过
 
 ---
 

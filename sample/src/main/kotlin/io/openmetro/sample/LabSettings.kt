@@ -17,6 +17,8 @@ data class LabSettings(
     val tileMode: OmTileMode = OmTileMode.Monochrome,
     val fontScale: Float = 1f,
     val gridOverlay: Boolean = false,
+    /** 强制从右往左排版，用来检查所有装饰是否跟着镜像。 */
+    val rtl: Boolean = false,
 )
 
 /** 预设强调色。刻意只给中等偏深的色相 —— 过浅的会被 `ensureVisible` 自动拉深。 */

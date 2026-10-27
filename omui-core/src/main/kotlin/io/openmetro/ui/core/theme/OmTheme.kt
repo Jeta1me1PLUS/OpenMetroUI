@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.unit.Dp
@@ -108,13 +109,26 @@ fun OmTheme(
         if (widthDp > 0.dp) OmGrid.forWidth(widthDp) else OmGrid.Compact
     }
 
+    // 跟随系统的「动画时长缩放」：设为 0 时所有动效瞬时完成
+    val context = LocalContext.current
+    val animatorScale = remember(context) {
+        runCatching {
+            android.provider.Settings.Global.getFloat(
+                context.contentResolver,
+                android.provider.Settings.Global.ANIMATOR_DURATION_SCALE,
+                1f,
+            )
+        }.getOrDefault(1f)
+    }
+    val effectiveMotion = remember(motion, animatorScale) { motion.scaledBy(animatorScale) }
+
     CompositionLocalProvider(
         LocalOmColors provides colors,
         LocalOmTypography provides typography,
         LocalOmSpacing provides spacing,
         LocalOmGrid provides resolvedGrid,
         LocalOmShapes provides shapes,
-        LocalOmMotion provides motion,
+        LocalOmMotion provides effectiveMotion,
         LocalOmTileMode provides tileMode,
     ) {
         if (paintBackground) {

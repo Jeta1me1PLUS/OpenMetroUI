@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -33,6 +34,7 @@ import androidx.compose.ui.window.PopupProperties
 import io.openmetro.ui.component.base.OmIcon
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.core.interaction.omClickable
+import io.openmetro.ui.core.interaction.rememberIsRtl
 import io.openmetro.ui.core.theme.OmTheme
 import io.openmetro.ui.icon.OmIcons
 
@@ -54,6 +56,7 @@ fun OmDropdown(
     enabled: Boolean = true,
 ) {
     val colors = OmTheme.colors
+    val rtl = rememberIsRtl()
     val shapes = OmTheme.shapes
     val spacing = OmTheme.spacing
     val typography = OmTheme.typography
@@ -126,9 +129,11 @@ fun OmDropdown(
                                 .background(if (selected) colors.accentQuiet else colors.surface)
                                 .drawBehind {
                                     if (selected) {
+                                        val barWidth = 3.dp.toPx()
                                         drawRect(
                                             color = colors.accent,
-                                            size = Size(3.dp.toPx(), size.height),
+                                            topLeft = Offset(if (rtl) size.width - barWidth else 0f, 0f),
+                                            size = Size(barWidth, size.height),
                                         )
                                     }
                                 }

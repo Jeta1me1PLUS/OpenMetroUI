@@ -189,6 +189,7 @@ OmSearchField(value = query, onValueChange = { query = it })
 
 <img src="images/06-list.png" width="240" />
 <img src="images/24-selected.png" width="240" />
+<img src="images/25-rtl.png" width="240" />
 <img src="images/08-cards.png" width="240" />
 
 ```kotlin
@@ -551,7 +552,7 @@ smoke/             consumes the published artifact via Maven coordinates only
 - `OmSheet` only expands from its handle, not from the content area
 - `OmCard` Ink variant changes only the background; text color is the caller's job
 - `OmMenu` does not flip near screen edges; pass a negative offset when anchored near the bottom
-- RTL and TalkBack have not been systematically audited
+- RTL is supported; TalkBack has basic semantics but has not been audited with a screen reader
 
 ---
 
