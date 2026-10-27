@@ -13,6 +13,9 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.disabled
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmIcon
@@ -101,6 +104,12 @@ private fun StepperButton(
     Box(
         modifier = Modifier
             .size(48.dp)
+            // 描述与禁用状态都挂在容器上：挂在图标上会变成两个节点，
+            // 读屏读到的是「图片」，说不出「不可用」
+            .semantics {
+                this.contentDescription = contentDescription
+                if (!enabled) disabled()
+            }
             .then(
                 if (enabled) {
                     Modifier.omClickable(role = Role.Button, onClick = onClick)
@@ -112,7 +121,7 @@ private fun StepperButton(
     ) {
         OmIcon(
             imageVector = icon,
-            contentDescription = contentDescription,
+            contentDescription = null,
             size = 20.dp,
             tint = if (enabled) colors.textPrimary else colors.textDisabled,
         )

@@ -1,5 +1,17 @@
 # 迁移指南
 
+## v0.17.2
+
+### 破坏性变更
+
+`OmStrings` 新增 `clear` 字段。用 `OmStrings.Chinese` / `English` 预设的不受影响；自己构造实例需要补一项：
+
+```kotlin
+OmStrings(…, clear = "清除")
+```
+
+---
+
 ## v0.17.0
 
 ### 破坏性变更

@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmIcon
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.core.interaction.omClickable
+import io.openmetro.ui.core.theme.LocalOmStrings
 import io.openmetro.ui.core.theme.OmTheme
 
 enum class OmTextFieldVariant {
@@ -168,7 +169,12 @@ fun OmTextField(
                             ) {
                                 OmIcon(
                                     imageVector = trailingIcon,
-                                    contentDescription = null,
+                                    // 可点的尾部图标必须有描述，否则读屏只念「图片」
+                                    contentDescription = if (onTrailingIconClick != null) {
+                                        LocalOmStrings.current.clear
+                                    } else {
+                                        null
+                                    },
                                     size = 20.dp,
                                     tint = colors.textSecondary,
                                 )
