@@ -15,6 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
 import io.openmetro.ui.core.interaction.omClickable
 import io.openmetro.ui.core.interaction.omFocusRing
 import io.openmetro.ui.core.theme.OmTheme
@@ -55,6 +58,7 @@ fun OmSwitch(
             .omFocusRing()
             .heightIn(min = 48.dp)
             .widthIn(min = 48.dp)
+            .semantics { toggleableState = ToggleableState(checked) }
             .omClickable(enabled = enabled, role = Role.Switch) { onCheckedChange(!checked) },
         contentAlignment = Alignment.Center,
     ) {

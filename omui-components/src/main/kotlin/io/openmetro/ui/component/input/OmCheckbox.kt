@@ -18,6 +18,9 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmText
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.toggleableState
+import androidx.compose.ui.state.ToggleableState
 import io.openmetro.ui.core.interaction.omClickable
 import io.openmetro.ui.core.interaction.omFocusRing
 import io.openmetro.ui.core.theme.OmTheme
@@ -47,6 +50,8 @@ fun OmCheckbox(
         modifier = modifier
             .omFocusRing()
             .heightIn(min = 48.dp)
+            // 只给 Role 不够：读屏还需要 ToggleableState 才知道当前是选中还是未选中
+            .semantics { toggleableState = ToggleableState(checked) }
             .omClickable(enabled = enabled, role = Role.Checkbox) { onCheckedChange(!checked) },
         verticalAlignment = Alignment.CenterVertically,
     ) {

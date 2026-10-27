@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.component.button.OmIconButton
+import io.openmetro.ui.core.theme.LocalOmStrings
 import io.openmetro.ui.core.theme.OmTheme
 import io.openmetro.ui.icon.OmIcons
 
@@ -38,7 +39,7 @@ fun OmTopBar(
     large: Boolean = true,
     onBack: (() -> Unit)? = null,
     backIcon: ImageVector = OmIcons.ArrowBack,
-    backContentDescription: String = "返回",
+    backContentDescription: String? = null,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     val colors = OmTheme.colors
@@ -54,7 +55,7 @@ fun OmTopBar(
         if (onBack != null) {
             BackButton(
                 icon = backIcon,
-                contentDescription = backContentDescription,
+                contentDescription = backContentDescription ?: LocalOmStrings.current.back,
                 onClick = onBack,
             )
             Spacer(Modifier.width(spacing.space2))

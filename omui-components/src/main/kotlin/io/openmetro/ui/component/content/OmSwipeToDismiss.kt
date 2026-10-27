@@ -27,6 +27,7 @@ import io.openmetro.ui.core.interaction.rememberIsRtl
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmText
+import io.openmetro.ui.core.theme.LocalOmStrings
 import io.openmetro.ui.core.theme.OmTheme
 import kotlin.math.roundToInt
 
@@ -65,7 +66,7 @@ fun OmSwipeToDismiss(
                 contentAlignment = Alignment.Center,
             ) {
                 OmText(
-                    text = "删除",
+                    text = LocalOmStrings.current.delete,
                     style = OmTheme.typography.label,
                     color = Color.White,
                     maxLines = 1,

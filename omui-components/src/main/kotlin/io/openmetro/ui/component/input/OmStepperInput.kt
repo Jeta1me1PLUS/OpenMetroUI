@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmIcon
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.core.interaction.omClickable
+import io.openmetro.ui.core.theme.LocalOmStrings
 import io.openmetro.ui.core.theme.OmTheme
 import io.openmetro.ui.icon.OmIcons
 
@@ -42,6 +43,7 @@ fun OmStepperInput(
     val spacing = OmTheme.spacing
     val typography = OmTheme.typography
 
+    val strings = LocalOmStrings.current
     val canDecrease = enabled && value - step >= min
     val canIncrease = enabled && value + step <= max
 
@@ -53,7 +55,7 @@ fun OmStepperInput(
     ) {
         StepperButton(
             icon = OmIcons.Minus,
-            contentDescription = "减少",
+            contentDescription = strings.decrease,
             enabled = canDecrease,
             onClick = { onValueChange(value - step) },
         )
@@ -80,7 +82,7 @@ fun OmStepperInput(
 
         StepperButton(
             icon = OmIcons.Add,
-            contentDescription = "增加",
+            contentDescription = strings.increase,
             enabled = canIncrease,
             onClick = { onValueChange(value + step) },
         )

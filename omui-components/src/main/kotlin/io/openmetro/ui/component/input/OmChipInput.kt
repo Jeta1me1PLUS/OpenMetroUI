@@ -18,6 +18,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.component.content.OmTag
+import io.openmetro.ui.core.theme.LocalOmStrings
 import io.openmetro.ui.core.theme.OmTheme
 
 /**
@@ -31,12 +32,13 @@ fun OmChipInput(
     values: List<String>,
     onValuesChange: (List<String>) -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: String = "输入后回车",
+    placeholder: String? = null,
     enabled: Boolean = true,
 ) {
     val colors = OmTheme.colors
     val spacing = OmTheme.spacing
     val typography = OmTheme.typography
+    val strings = LocalOmStrings.current
 
     var input by remember { mutableStateOf("") }
 
@@ -77,7 +79,7 @@ fun OmChipInput(
             decorationBox = { innerTextField ->
                 if (input.isEmpty()) {
                     OmText(
-                        text = placeholder,
+                        text = placeholder ?: strings.chipInputPlaceholder,
                         style = typography.bodyM,
                         color = if (enabled) colors.textSecondary else colors.textDisabled,
                         maxLines = 1,

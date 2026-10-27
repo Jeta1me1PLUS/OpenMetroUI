@@ -16,7 +16,7 @@
   </tr>
 </table>
 
-56 个组件，已在真机走查。要求 minSdk 24、Compose 1.11.4 以上。
+57 个组件，已在真机走查。要求 minSdk 24、Compose 1.11.4 以上。
 
 ---
 
@@ -44,7 +44,7 @@ Metro 和瑞士国际主义有共同的底子：扁平、无衬线、网格、�
 ### 2.1 Maven Central
 
 ```kotlin
-implementation("io.github.jeta1me1plus:omui-components:0.16.0")
+implementation("io.github.jeta1me1plus:omui-components:0.17.0")
 ```
 
 不需要额外仓库配置。已用只配 `mavenCentral()` 的消费者验证过，能正常解析。
@@ -549,7 +549,7 @@ fun `配色符合规范`() {
 
 ```text
 omui-core/         token、主题、交互原语、栅格布局
-omui-components/   56 个组件
+omui-components/   57 个组件
 omui-icons/        13 个几何图标
 omui-test/         OmCheck 设计约束校验
 sample/            五页 demo

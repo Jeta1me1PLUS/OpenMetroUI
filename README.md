@@ -16,7 +16,7 @@ A Jetpack Compose UI library that fuses **Metro tiles** with **Swiss Internation
   </tr>
 </table>
 
-56 components, verified on device. Requires minSdk 24 and Compose 1.11.4+.
+57 components, verified on device. Requires minSdk 24 and Compose 1.11.4+.
 
 ---
 
@@ -44,7 +44,7 @@ Spectrum tiles are opt-in. The eight hues share fixed lightness and chroma in OK
 ### 2.1 Maven Central
 
 ```kotlin
-implementation("io.github.jeta1me1plus:omui-components:0.16.0")
+implementation("io.github.jeta1me1plus:omui-components:0.17.0")
 ```
 
 No extra repository config needed. Verified by resolving the published artifact with `mavenCentral()` only.
@@ -549,7 +549,7 @@ A prebuilt APK is attached to each [release](https://github.com/Jeta1me1PLUS/Ope
 
 ```text
 omui-core/         tokens, theme, interaction primitives, grid layout
-omui-components/   56 components
+omui-components/   57 components
 omui-icons/        13 geometric icons
 omui-test/         OmCheck design-spec validation
 sample/            five-page demo

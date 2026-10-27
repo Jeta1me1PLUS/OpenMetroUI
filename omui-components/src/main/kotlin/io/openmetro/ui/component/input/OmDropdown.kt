@@ -35,6 +35,7 @@ import io.openmetro.ui.component.base.OmIcon
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.core.interaction.omClickable
 import io.openmetro.ui.core.interaction.rememberIsRtl
+import io.openmetro.ui.core.theme.LocalOmStrings
 import io.openmetro.ui.core.theme.OmTheme
 import io.openmetro.ui.icon.OmIcons
 
@@ -52,7 +53,7 @@ fun OmDropdown(
     selectedIndex: Int,
     onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: String = "请选择",
+    placeholder: String? = null,
     enabled: Boolean = true,
 ) {
     val colors = OmTheme.colors
@@ -60,6 +61,7 @@ fun OmDropdown(
     val shapes = OmTheme.shapes
     val spacing = OmTheme.spacing
     val typography = OmTheme.typography
+    val strings = LocalOmStrings.current
 
     var expanded by remember { mutableStateOf(false) }
     var anchorSize by remember { mutableStateOf(IntSize.Zero) }
@@ -86,7 +88,7 @@ fun OmDropdown(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             OmText(
-                text = if (hasSelection) options[selectedIndex] else placeholder,
+                text = if (hasSelection) options[selectedIndex] else (placeholder ?: strings.selectPlaceholder),
                 style = typography.bodyL,
                 color = when {
                     !enabled -> colors.textDisabled

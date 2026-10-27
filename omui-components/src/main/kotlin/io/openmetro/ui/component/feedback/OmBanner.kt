@@ -25,6 +25,7 @@ import io.openmetro.ui.component.base.OmIcon
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.core.interaction.omClickable
 import io.openmetro.ui.core.interaction.rememberIsRtl
+import io.openmetro.ui.core.theme.LocalOmStrings
 import io.openmetro.ui.core.theme.OmTheme
 import io.openmetro.ui.icon.OmIcons
 
@@ -122,7 +123,7 @@ fun OmBanner(
             ) {
                 OmIcon(
                     imageVector = OmIcons.Close,
-                    contentDescription = "关闭",
+                    contentDescription = LocalOmStrings.current.close,
                     size = 16.dp,
                     tint = colors.textSecondary,
                 )

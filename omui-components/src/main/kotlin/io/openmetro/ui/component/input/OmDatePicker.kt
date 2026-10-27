@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.component.button.OmIconButton
 import io.openmetro.ui.core.interaction.omClickable
+import io.openmetro.ui.core.theme.LocalOmStrings
 import io.openmetro.ui.core.theme.OmTheme
 import io.openmetro.ui.icon.OmIcons
 import java.util.Calendar
@@ -49,6 +50,7 @@ fun OmDatePicker(
     val colors = OmTheme.colors
     val spacing = OmTheme.spacing
     val typography = OmTheme.typography
+    val strings = LocalOmStrings.current
 
     val today = remember {
         val cal = Calendar.getInstance()
@@ -66,7 +68,7 @@ fun OmDatePicker(
         Row(verticalAlignment = Alignment.CenterVertically) {
             OmIconButton(
                 icon = OmIcons.ChevronEnd,
-                contentDescription = "上个月",
+                contentDescription = strings.previousMonth,
                 onClick = {
                     if (month == 1) {
                         year -= 1
@@ -78,11 +80,15 @@ fun OmDatePicker(
                 modifier = Modifier.graphicsLayer { rotationZ = 180f },
             )
             Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
-                OmText(text = "$year 年 $month 月", style = typography.title)
+                val monthName = strings.monthNames.getOrElse(month - 1) { month.toString() }
+                OmText(
+                    text = String.format(strings.yearMonthFormat, year.toString(), monthName),
+                    style = typography.title,
+                )
             }
             OmIconButton(
                 icon = OmIcons.ChevronEnd,
-                contentDescription = "下个月",
+                contentDescription = strings.nextMonth,
                 onClick = {
                     if (month == 12) {
                         year += 1
@@ -96,7 +102,7 @@ fun OmDatePicker(
 
         // 星期表头：周一起始，与多数中文日历一致
         Row(modifier = Modifier.fillMaxWidth()) {
-            WeekdayLabels.forEach { label ->
+            strings.weekdayLabels.forEach { label ->
                 Box(
                     modifier = Modifier.weight(1f).padding(vertical = spacing.space2),
                     contentAlignment = Alignment.Center,
@@ -159,7 +165,6 @@ fun OmDatePicker(
     }
 }
 
-private val WeekdayLabels = listOf("一", "二", "三", "四", "五", "六", "日")
 
 /** 当月 1 号是星期几，0 = 周一。 */
 private fun firstWeekdayIndex(year: Int, month: Int): Int {

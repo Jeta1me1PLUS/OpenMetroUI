@@ -13,6 +13,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmText
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.selected
 import io.openmetro.ui.core.interaction.omClickable
 import io.openmetro.ui.core.interaction.omFocusRing
 import io.openmetro.ui.core.theme.OmTheme
@@ -41,6 +43,7 @@ fun OmRadio(
         modifier = modifier
             .omFocusRing()
             .heightIn(min = 48.dp)
+            .semantics { this.selected = selected }
             .omClickable(enabled = enabled, role = Role.RadioButton, onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
     ) {

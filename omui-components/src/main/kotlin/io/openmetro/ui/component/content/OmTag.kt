@@ -21,6 +21,7 @@ import io.openmetro.ui.component.base.OmIcon
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.core.interaction.omClickable
 import io.openmetro.ui.core.interaction.omFocusRing
+import io.openmetro.ui.core.theme.LocalOmStrings
 import io.openmetro.ui.core.theme.OmTheme
 import io.openmetro.ui.icon.OmIcons
 
@@ -104,7 +105,7 @@ fun OmTag(
             ) {
                 OmIcon(
                     imageVector = OmIcons.Close,
-                    contentDescription = "移除",
+                    contentDescription = LocalOmStrings.current.remove,
                     size = 14.dp,
                     tint = contentColor,
                 )

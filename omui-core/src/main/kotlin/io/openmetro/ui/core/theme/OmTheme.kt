@@ -94,6 +94,7 @@ fun OmTheme(
     motion: OmMotion = OmMotion.Default,
     tileMode: OmTileMode = OmTileMode.Monochrome,
     grid: OmGrid? = null,
+    strings: OmStrings? = null,
     paintBackground: Boolean = true,
     content: @Composable () -> Unit,
 ) {
@@ -130,6 +131,7 @@ fun OmTheme(
         LocalOmShapes provides shapes,
         LocalOmMotion provides effectiveMotion,
         LocalOmTileMode provides tileMode,
+        LocalOmStrings provides (strings ?: remember { OmStrings.forSystemLocale() }),
     ) {
         if (paintBackground) {
             Box(

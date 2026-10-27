@@ -13,6 +13,7 @@ android {
 
     defaultConfig {
         minSdk = 24
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
@@ -46,6 +47,10 @@ dependencies {
 
     // @Preview 注解只需要编译期可见，不进运行时 classpath
     compileOnly(libs.androidx.compose.ui.tooling.preview)
+
+    // 组件行为测试：跑在设备 / 模拟器上
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
 
 val javadocJar = tasks.register<Jar>("javadocJar") {

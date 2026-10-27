@@ -2,6 +2,30 @@
 
 按版本倒序，只列改了什么。
 
+## v0.17.0 · 2026-10-27
+
+国际化、懒加载列表、组件测试与迁移文档。
+
+### 新增
+
+- `OmStrings` + `LocalOmStrings`：组件内置文案（读屏描述、占位符、月份名、星期名）不再硬编码，默认按系统语言在中英之间选，可用 `OmTheme(strings = …)` 覆盖。
+- `OmLazyList`：`LazyColumn` 版本，几百条以上数据用它；`OmList` 保留给短列表。**不能嵌套在 `OmScreen(scrollable = true)` 里**。
+- `MIGRATION.md`：补齐 0.10 到 0.17 的全部破坏性变更。
+- `omui-components` 的 9 个行为测试（`src/androidTest`）：按钮点击、标签删除、左滑删除、页签切换、磁贴翻面、复选框切换、下拉选中、表格行点击、折叠展开。
+
+### 修复
+
+- `OmCheckbox` / `OmSwitch` / `OmRadio` 缺状态语义：只设了 `Role`，读屏说不出「已选中 / 未选中」。补上 `toggleableState` / `selected`。
+
+### 变更（破坏性）
+
+- 四个占位符/描述参数改为可空，不传时从 `OmStrings` 取：`OmDropdown.placeholder`、`OmSearchField.placeholder`、`OmChipInput.placeholder`、`OmTopBar.backContentDescription`。
+
+### 未验证
+
+- 英文环境下的实际渲染（月份名、星期缩写）
+- 页签在测试环境里点击不触发（用语义 action 可以），demo 中触摸正常，原因待查
+
 ## v0.16.0 · 2026-10-27
 
 无障碍第二批与 API 补全。

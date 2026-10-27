@@ -2,6 +2,7 @@ package io.openmetro.ui.component.input
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.openmetro.ui.core.theme.LocalOmStrings
 import io.openmetro.ui.icon.OmIcons
 
 /**
@@ -15,7 +16,7 @@ fun OmSearchField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    placeholder: String = "搜索",
+    placeholder: String? = null,
     onClear: (() -> Unit)? = null,
 ) {
     val hasValue = value.isNotEmpty()
@@ -24,7 +25,7 @@ fun OmSearchField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier,
-        placeholder = placeholder,
+        placeholder = placeholder ?: LocalOmStrings.current.searchPlaceholder,
         variant = OmTextFieldVariant.Filled,
         leadingIcon = OmIcons.Search,
         trailingIcon = if (hasValue) OmIcons.Close else null,
