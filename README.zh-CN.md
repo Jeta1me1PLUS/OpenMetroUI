@@ -549,9 +549,7 @@ smoke/             只用 Maven 坐标消费发布产物，验证其完整可用
 ## 10. 已知限制
 
 - `OmTag` 删除按钮命中区 28dp，低于 48dp 常规下限
-- `OmSheet` 只能从手柄展开，不能从内容区上滑
-- `OmCard` 的 Ink 变体只换底色，文字颜色要调用方自己处理
-- `OmMenu` 不会在屏幕边缘自动翻转，靠近底部时需要传负的 offset
+- `OmSheet` 默认只从手柄拖；内容不滚动时可传 `dragHandleOnly = false`
 - RTL 已支持；TalkBack 有基础语义，但还没用读屏实际走查过
 
 ---

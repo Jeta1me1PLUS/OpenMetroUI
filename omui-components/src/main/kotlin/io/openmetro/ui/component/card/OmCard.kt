@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import io.openmetro.ui.core.theme.LocalOmColors
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import io.openmetro.ui.core.theme.OmTheme
@@ -36,6 +38,19 @@ fun OmCard(
     val colors = OmTheme.colors
     val shapes = OmTheme.shapes
 
+    // Ink 卡片是反白块：内部一切默认色都要翻过来，否则调用方得逐行指定颜色
+    val contentColors = if (variant == OmCardVariant.Ink) {
+        colors.copy(
+            textPrimary = colors.onInverse,
+            textSecondary = colors.onInverse.copy(alpha = 0.72f),
+            textDisabled = colors.onInverse.copy(alpha = 0.38f),
+            line = colors.onInverse.copy(alpha = 0.20f),
+            lineStrong = colors.onInverse.copy(alpha = 0.40f),
+        )
+    } else {
+        colors
+    }
+
     val background = when (variant) {
         OmCardVariant.Flat -> colors.surfaceVariant
         OmCardVariant.Outlined -> Color.Transparent
@@ -47,11 +62,13 @@ fun OmCard(
         Modifier
     }
 
-    Column(
-        modifier = modifier
-            .background(background)
-            .then(border)
-            .padding(OmTheme.spacing.space4),
-        content = content,
-    )
+    CompositionLocalProvider(LocalOmColors provides contentColors) {
+        Column(
+            modifier = modifier
+                .background(background)
+                .then(border)
+                .padding(OmTheme.spacing.space4),
+            content = content,
+        )
+    }
 }

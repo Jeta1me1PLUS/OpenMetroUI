@@ -12,6 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
@@ -29,6 +34,9 @@ import io.openmetro.ui.core.theme.OmTheme
  * 指示条在未选中时用透明占位，切换时只变颜色，不改变高度。
  *
  * @param scrollable 标签超过屏宽时允许横滑（3 个以内通常不需要）
+ * @param pagerState 提供时与轮播双向联动：点击标签会 `animateScrollToPage`，
+ *   手动滑动页面也会把选中态同步回来。传入后 `onSelect` 仍然由宿主维护，
+ *   它只是把 pager 的当前页转述给你。
  */
 @Composable
 fun OmPivot(
@@ -37,10 +45,21 @@ fun OmPivot(
     onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
     scrollable: Boolean = false,
+    pagerState: PagerState? = null,
 ) {
     val colors = OmTheme.colors
     val spacing = OmTheme.spacing
     val typography = OmTheme.typography
+    val scope = rememberCoroutineScope()
+
+    // 单向：pager -> onSelect。点击走 scrollToPage，再由这里回流，不会形成循环。
+    if (pagerState != null) {
+        LaunchedEffect(pagerState) {
+            snapshotFlow { pagerState.currentPage }.collect { page ->
+                if (page != selectedIndex) onSelect(page)
+            }
+        }
+    }
 
     val rowModifier = if (scrollable) {
         Modifier.horizontalScroll(rememberScrollState())
@@ -57,7 +76,13 @@ fun OmPivot(
             Column(
                 modifier = Modifier
                     .omFocusRing()
-                    .omClickable(role = Role.Tab) { onSelect(index) }
+                    .omClickable(role = Role.Tab) {
+                        if (pagerState != null) {
+                            scope.launch { pagerState.animateScrollToPage(index) }
+                        } else {
+                            onSelect(index)
+                        }
+                    }
                     .padding(top = spacing.space2),
             ) {
                 OmText(

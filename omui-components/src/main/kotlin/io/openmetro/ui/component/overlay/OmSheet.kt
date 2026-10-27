@@ -49,6 +49,14 @@ fun OmSheet(
     visible: Boolean,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    /**
+     * 只在 48dp 手柄区响应拖拽。
+     *
+     * 内容里有纵向滚动列表时必须保持 true，否则拖列表会连带拖面板。
+     * 内容不滚动时可以传 false，让整块面板都能拖 —— 这是「嵌套滚动协商」的
+     * 显式替代：由宿主声明内容能不能滚，比运行时猜测可靠。
+     */
+    dragHandleOnly: Boolean = true,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     if (!visible) return
@@ -83,6 +91,23 @@ fun OmSheet(
             label = "omSheetOffset",
         )
 
+        val dragModifier = Modifier.draggable(
+            orientation = Orientation.Vertical,
+            state = rememberDraggableState { delta ->
+                dragging = true
+                dragOffset = (dragOffset + delta).coerceIn(-300f, 600f)
+            },
+            onDragStopped = {
+                when {
+                    dragOffset < -120f -> expanded = true
+                    dragOffset > 160f -> onDismiss()
+                    dragOffset > 40f -> expanded = false
+                }
+                dragging = false
+                dragOffset = 0f
+            },
+        )
+
         Box(Modifier.fillMaxSize()) {
             Box(
                 modifier = Modifier
@@ -97,28 +122,14 @@ fun OmSheet(
                     .fillMaxWidth()
                     .fillMaxHeight(heightFraction)
                     .offset { IntOffset(0, offset.roundToInt()) }
-                    .background(colors.surface),
+                    .background(colors.surface)
+                    .then(if (dragHandleOnly) Modifier else dragModifier),
             ) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(SheetHandleHeight)
-                        .draggable(
-                            orientation = Orientation.Vertical,
-                            state = rememberDraggableState { delta ->
-                                dragging = true
-                                dragOffset = (dragOffset + delta).coerceIn(-300f, 600f)
-                            },
-                            onDragStopped = {
-                                when {
-                                    dragOffset < -120f -> expanded = true
-                                    dragOffset > 160f -> onDismiss()
-                                    dragOffset > 40f -> expanded = false
-                                }
-                                dragging = false
-                                dragOffset = 0f
-                            },
-                        ),
+                        .then(if (dragHandleOnly) dragModifier else Modifier),
                     contentAlignment = Alignment.Center,
                 ) {
                     Box(

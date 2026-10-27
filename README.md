@@ -549,9 +549,7 @@ smoke/             consumes the published artifact via Maven coordinates only
 ## 10. Known limitations
 
 - `OmTag` delete button has a 28dp hit area, below the 48dp guideline
-- `OmSheet` only expands from its handle, not from the content area
-- `OmCard` Ink variant changes only the background; text color is the caller's job
-- `OmMenu` does not flip near screen edges; pass a negative offset when anchored near the bottom
+- `OmSheet` drags from its handle by default; pass `dragHandleOnly = false` when the content does not scroll
 - RTL is supported; TalkBack has basic semantics but has not been audited with a screen reader
 
 ---

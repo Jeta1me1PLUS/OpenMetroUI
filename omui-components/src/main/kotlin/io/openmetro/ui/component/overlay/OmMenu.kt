@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -53,7 +54,10 @@ fun OmMenu(
     val spacing = OmTheme.spacing
 
     Popup(
-        offset = offset,
+        // 靠近窗口底部时自动向上翻，避免面板被裁掉
+        popupPositionProvider = remember(offset) {
+            OmAnchorPositionProvider(extraOffset = offset)
+        },
         onDismissRequest = onDismissRequest,
         properties = PopupProperties(focusable = true),
     ) {

@@ -478,12 +478,11 @@ fun GalleryScreen() {
         }
         Spacer(Modifier.height(spacing.space3))
         OmCard(variant = OmCardVariant.Ink) {
-            OmText("Ink", style = typography.title, color = colors.onInverse)
+            OmText("Ink", style = typography.title)
             Spacer(Modifier.height(spacing.space2))
             OmText(
-                "反白块。内部文字要显式用 onInverse，组件不替你换色。",
+                "反白块会自动把内部文字与描边翻成浅色，不用手动传 onInverse。",
                 style = typography.bodyM,
-                color = colors.onInverse,
             )
         }
     }

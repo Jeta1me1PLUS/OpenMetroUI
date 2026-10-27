@@ -107,7 +107,10 @@ fun OmDropdown(
 
         if (expanded) {
             Popup(
-                offset = IntOffset(0, anchorSize.height),
+                // 面板宽度跟随触发区，下方放不下时向上翻
+                popupPositionProvider = remember {
+                    io.openmetro.ui.component.overlay.OmAnchorPositionProvider(matchAnchorWidth = true)
+                },
                 onDismissRequest = { expanded = false },
                 properties = PopupProperties(focusable = true),
             ) {

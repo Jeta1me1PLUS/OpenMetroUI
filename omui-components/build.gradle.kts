@@ -43,6 +43,9 @@ dependencies {
     // 组件需要默认的导航图标（返回箭头）。只依赖 core 的宿主不受影响：
     // 图标是 Kotlin 代码而非资源，不增加包体负担。
     api(project(":omui-icons"))
+
+    // @Preview 注解只需要编译期可见，不进运行时 classpath
+    compileOnly(libs.androidx.compose.ui.tooling.preview)
 }
 
 val javadocJar = tasks.register<Jar>("javadocJar") {
