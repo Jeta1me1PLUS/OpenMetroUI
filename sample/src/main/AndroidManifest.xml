@@ -29,6 +29,16 @@
                 android:resource="@xml/news_widget_info" />
         </receiver>
 
+
+        <activity
+            android:name=".widget.NewsWidgetConfigureActivity"
+            android:exported="true"
+            android:theme="@style/Theme.OpenMetroUI">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
     </application>
 
 </manifest>

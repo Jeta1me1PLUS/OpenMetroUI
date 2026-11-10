@@ -44,7 +44,7 @@ Metro 和瑞士国际主义有共同的底子：扁平、无衬线、网格、�
 ### 2.1 Maven Central
 
 ```kotlin
-implementation("io.github.jeta1me1plus:omui-components:0.18.0")
+implementation("io.github.jeta1me1plus:omui-components:0.19.0")
 ```
 
 不需要额外仓库配置。已用只配 `mavenCentral()` 的消费者验证过，能正常解析。
@@ -492,6 +492,22 @@ class NewsWidgetReceiver : GlanceAppWidgetReceiver() {
 ```
 
 `OmTileWidget` 与 `OmValueTileWidget` 与 App 内的 `OmTile` 共用同一套 token 与取色规则，但它们**不是同一个组件** —— 小组件跑在 Launcher 的 RemoteViews 管线里，只能用 Glance 的有限组件集。
+
+磁贴组（一次显示多个指标）：
+
+```kotlin
+OmTileGroupWidget(
+    tiles = listOf(
+        OmWidgetTile("3", "未读", OmTileTone.Accent),
+        OmWidgetTile("1,284", "活跃", OmTileTone.Paper),
+        OmWidgetTile("98%", "在线", OmTileTone.Ink),
+    ),
+    dark = false,
+    onClick = actionStartActivity<MainActivity>(),
+)
+```
+
+配置页与定时刷新：provider XML 里 `android:configure` 指向一个 Activity，用户拖到桌面后先选配色；刷新用 `WorkManager`（15 分钟），`updatePeriodMillis` 设为 0 关掉系统那套。
 
 **已知限制**：Android 12+ 的桌面会给所有小组件强制加圆角（`system_app_widget_background_radius`），应用侧无法关闭。这是系统行为，与本库的直角立场冲突，但改不了。
 

@@ -2,6 +2,25 @@
 
 按版本倒序，只列改了什么。
 
+## v0.19.0 · 2026-11-10
+
+小组件的三块补全：磁贴组、配置页、定时刷新。
+
+### 新增
+
+- `OmTileGroupWidget`：一行并排 2–4 块磁贴，块间留 4dp 缝隙（露出 launcher 背景）。配 `omWidgetTones(count)` 按条数挑色调，保证一组里深浅错开。
+- demo 的配置页 `NewsWidgetConfigureActivity`：拖到桌面后先选底色（强调 / 反白 / 浅色），写入 `SharedPreferences`，小组件下次刷新即生效。
+- demo 的定时刷新：`CoroutineWorker` + `WorkManager`，15 分钟一次，`KEEP` 策略只排一次。provider XML 里 `updatePeriodMillis=0`（关掉系统那套，它最短 30 分钟且不可靠）。
+
+### 尝试但未成功
+
+- **关闭 Android 12+ 的系统圆角**：试过「根容器不设背景、底色画在内层」，让 launcher 找不到裁剪目标。实测无效 —— launcher 是无条件裁剪，不看有没有背景。平台没有提供关闭入口，这条限制无法绕过。
+
+### 未验证
+
+- 配置页的完整流程（拖到桌面 → 选色 → 生效）：模拟器的组件选择器是全屏 sheet，adb 拖拽出不去，需要真机手动走一遍
+- `WorkManager` 的 15 分钟实际触发（模拟器上等不到）
+
 ## v0.18.0 · 2026-10-27
 
 桌面小组件。

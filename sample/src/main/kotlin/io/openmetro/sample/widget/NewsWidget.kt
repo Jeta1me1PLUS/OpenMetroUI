@@ -28,11 +28,13 @@ class NewsWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            val dark = LocalContext.current.isNightMode()
+            val context = LocalContext.current
+            val dark = context.isNightMode()
             OmValueTileWidget(
                 value = "3",
                 label = "未读消息",
-                tone = OmTileTone.Accent,
+                // 配色由配置页写入，用户换了颜色下次刷新就生效
+                tone = WidgetPrefs.tone(context),
                 dark = dark,
                 onClick = actionStartActivity<MainActivity>(),
             )

@@ -44,7 +44,7 @@ Spectrum tiles are opt-in. The eight hues share fixed lightness and chroma in OK
 ### 2.1 Maven Central
 
 ```kotlin
-implementation("io.github.jeta1me1plus:omui-components:0.18.0")
+implementation("io.github.jeta1me1plus:omui-components:0.19.0")
 ```
 
 No extra repository config needed. Verified by resolving the published artifact with `mavenCentral()` only.
@@ -492,6 +492,22 @@ class NewsWidgetReceiver : GlanceAppWidgetReceiver() {
 ```
 
 `OmTileWidget` and `OmValueTileWidget` share the same tokens and color rules as `OmTile`, but they are **not the same component** — widgets run through the launcher's RemoteViews pipeline and can only use Glance's limited component set.
+
+Tile group (several metrics at once):
+
+```kotlin
+OmTileGroupWidget(
+    tiles = listOf(
+        OmWidgetTile("3", "Unread", OmTileTone.Accent),
+        OmWidgetTile("1,284", "Active", OmTileTone.Paper),
+        OmWidgetTile("98%", "Online", OmTileTone.Ink),
+    ),
+    dark = false,
+    onClick = actionStartActivity<MainActivity>(),
+)
+```
+
+Configuration and refresh: point `android:configure` at an Activity so users pick a color right after dropping the widget; refresh with `WorkManager` (15 min) and set `updatePeriodMillis` to 0 to disable the system scheduler.
 
 **Known limitation**: Android 12+ forces a rounded corner radius on every widget (`system_app_widget_background_radius`). Apps cannot turn it off, so widgets will not be perfectly square.
 
