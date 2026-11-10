@@ -28,6 +28,7 @@ include(":omui-core")
 include(":omui-components")
 include(":omui-icons")
 include(":omui-test")
+include(":omui-glance")
 include(":sample")
 
 // 只在发布产物存在时才纳入：这个模块故意只用 Maven 坐标依赖本库，

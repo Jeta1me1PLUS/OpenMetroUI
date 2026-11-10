@@ -16,7 +16,7 @@ A Jetpack Compose UI library that fuses **Metro tiles** with **Swiss Internation
   </tr>
 </table>
 
-57 components, verified on device. Requires minSdk 24 and Compose 1.11.4+.
+59 components, verified on device. Requires minSdk 24 and Compose 1.11.4+.
 
 ---
 
@@ -44,7 +44,7 @@ Spectrum tiles are opt-in. The eight hues share fixed lightness and chroma in OK
 ### 2.1 Maven Central
 
 ```kotlin
-implementation("io.github.jeta1me1plus:omui-components:0.17.3")
+implementation("io.github.jeta1me1plus:omui-components:0.18.0")
 ```
 
 No extra repository config needed. Verified by resolving the published artifact with `mavenCentral()` only.
@@ -460,6 +460,41 @@ OmTimeline(
 OmChipInput(values = tags, onValuesChange = { tags = it })
 ```
 
+
+### 4.11 Home-screen widgets
+
+<img src="images/29-widget.png" width="240" />
+
+Widgets live in a separate module, so only hosts that need them pull in Glance.
+
+```kotlin
+implementation("io.github.jeta1me1plus:omui-glance:0.18.0")
+```
+
+```kotlin
+class NewsWidget : GlanceAppWidget() {
+    override suspend fun provideGlance(context: Context, id: GlanceId) {
+        provideContent {
+            OmValueTileWidget(
+                value = "3",
+                label = "Unread",
+                tone = OmTileTone.Accent,
+                dark = LocalContext.current.isNightMode(),
+                onClick = actionStartActivity<MainActivity>(),
+            )
+        }
+    }
+}
+
+class NewsWidgetReceiver : GlanceAppWidgetReceiver() {
+    override val glanceAppWidget: GlanceAppWidget = NewsWidget()
+}
+```
+
+`OmTileWidget` and `OmValueTileWidget` share the same tokens and color rules as `OmTile`, but they are **not the same component** — widgets run through the launcher's RemoteViews pipeline and can only use Glance's limited component set.
+
+**Known limitation**: Android 12+ forces a rounded corner radius on every widget (`system_app_widget_background_radius`). Apps cannot turn it off, so widgets will not be perfectly square.
+
 ---
 
 ## 5. Theming
@@ -552,6 +587,7 @@ omui-core/         tokens, theme, interaction primitives, grid layout
 omui-components/   57 components
 omui-icons/        13 geometric icons
 omui-test/         OmCheck design-spec validation
+omui-glance/       Home-screen widgets (Glance), optional module
 sample/            five-page demo
 smoke/             consumes the published artifact via Maven coordinates only
 ```

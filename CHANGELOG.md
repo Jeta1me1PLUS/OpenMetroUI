@@ -2,6 +2,23 @@
 
 按版本倒序，只列改了什么。
 
+## v0.18.0 · 2026-10-27
+
+桌面小组件。
+
+### 新增
+
+- **`omui-glance` 模块**：独立发布，只有需要小组件的宿主才拉 Glance 依赖。
+- `OmTileWidget`：磁贴形态的小组件（底色 + 标签 + 标题），字号随 Launcher 给的尺寸自适应。
+- `OmValueTileWidget`：数字优先的小组件，用于汇率、步数这类场景。
+- `OmGlanceColors` / `omGlanceTile`：把 `OmColorScheme` 的 token 转成 Glance 的 `ColorProvider`，保证小组件与 App 内配色一致。
+- demo 增加「晨间简报磁贴」小组件（`NewsWidget` + Receiver + provider XML + 预览图）。
+
+### 已知限制
+
+- Android 12+ 桌面会给所有小组件强制加圆角（`system_app_widget_background_radius`），应用侧无法关闭，与直角立场冲突。
+- 小组件的深色跟随系统夜间模式，不读 App 内的手动主题开关 —— 桌面没有 App 上下文。
+
 ## v0.17.3 · 2026-10-27
 
 ### 修复

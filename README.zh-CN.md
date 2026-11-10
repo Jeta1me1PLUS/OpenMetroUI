@@ -16,7 +16,7 @@
   </tr>
 </table>
 
-57 个组件，已在真机走查。要求 minSdk 24、Compose 1.11.4 以上。
+59 个组件，已在真机走查。要求 minSdk 24、Compose 1.11.4 以上。
 
 ---
 
@@ -44,7 +44,7 @@ Metro 和瑞士国际主义有共同的底子：扁平、无衬线、网格、�
 ### 2.1 Maven Central
 
 ```kotlin
-implementation("io.github.jeta1me1plus:omui-components:0.17.3")
+implementation("io.github.jeta1me1plus:omui-components:0.18.0")
 ```
 
 不需要额外仓库配置。已用只配 `mavenCentral()` 的消费者验证过，能正常解析。
@@ -460,6 +460,41 @@ OmTimeline(
 OmChipInput(values = tags, onValuesChange = { tags = it })
 ```
 
+
+### 4.11 桌面小组件
+
+<img src="images/29-widget.png" width="240" />
+
+小组件在独立模块 `omui-glance` 里，只有需要的人才会拉进 Glance 依赖。
+
+```kotlin
+implementation("io.github.jeta1me1plus:omui-glance:0.18.0")
+```
+
+```kotlin
+class NewsWidget : GlanceAppWidget() {
+    override suspend fun provideGlance(context: Context, id: GlanceId) {
+        provideContent {
+            OmValueTileWidget(
+                value = "3",
+                label = "未读消息",
+                tone = OmTileTone.Accent,
+                dark = LocalContext.current.isNightMode(),
+                onClick = actionStartActivity<MainActivity>(),
+            )
+        }
+    }
+}
+
+class NewsWidgetReceiver : GlanceAppWidgetReceiver() {
+    override val glanceAppWidget: GlanceAppWidget = NewsWidget()
+}
+```
+
+`OmTileWidget` 与 `OmValueTileWidget` 与 App 内的 `OmTile` 共用同一套 token 与取色规则，但它们**不是同一个组件** —— 小组件跑在 Launcher 的 RemoteViews 管线里，只能用 Glance 的有限组件集。
+
+**已知限制**：Android 12+ 的桌面会给所有小组件强制加圆角（`system_app_widget_background_radius`），应用侧无法关闭。这是系统行为，与本库的直角立场冲突，但改不了。
+
 ---
 
 ## 5. 主题
@@ -552,6 +587,7 @@ omui-core/         token、主题、交互原语、栅格布局
 omui-components/   57 个组件
 omui-icons/        13 个几何图标
 omui-test/         OmCheck 设计约束校验
+omui-glance/       桌面小组件（Glance），可选模块
 sample/            五页 demo
 smoke/             只用 Maven 坐标消费发布产物，验证其完整可用
 ```

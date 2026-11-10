@@ -168,7 +168,7 @@ if [ "${CLEAN}" = 1 ]; then
 fi
 
 if [ "${RUN_LINT}" = 1 ]; then
-  TASKS=":omui-core:testDebugUnitTest :omui-test:testDebugUnitTest :omui-core:lintDebug :omui-components:lintDebug :omui-icons:lintDebug :omui-test:lintDebug :sample:lintDebug ${ASSEMBLE_TASK}"
+  TASKS=":omui-core:testDebugUnitTest :omui-test:testDebugUnitTest :omui-core:lintDebug :omui-components:lintDebug :omui-icons:lintDebug :omui-test:lintDebug :omui-glance:lintDebug :sample:lintDebug ${ASSEMBLE_TASK}"
   step "单元测试 + lint + 编译中（日志：${LOG_FILE}）"
 else
   TASKS=":omui-core:testDebugUnitTest :omui-test:testDebugUnitTest ${ASSEMBLE_TASK}"

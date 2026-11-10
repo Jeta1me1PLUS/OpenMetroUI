@@ -23,6 +23,7 @@ tasks.register("publishToDist") {
         ":omui-icons:publishAllPublicationsToDistRepository",
         ":omui-components:publishAllPublicationsToDistRepository",
         ":omui-test:publishAllPublicationsToDistRepository",
+        ":omui-glance:publishAllPublicationsToDistRepository",
     )
 }
 
@@ -109,6 +110,7 @@ tasks.register("publishToGithub") {
             ":omui-icons:publishAllPublicationsToGithubRepository",
             ":omui-components:publishAllPublicationsToGithubRepository",
             ":omui-test:publishAllPublicationsToGithubRepository",
+            ":omui-glance:publishAllPublicationsToGithubRepository",
         )
     } else {
         // 没有凭证时不挂任务，直接给出可读的提示，而不是 "Task not found"
@@ -137,6 +139,7 @@ tasks.register("publishToCentral") {
         ":omui-icons:publishAllPublicationsToCentralRepoRepository",
         ":omui-components:publishAllPublicationsToCentralRepoRepository",
         ":omui-test:publishAllPublicationsToCentralRepoRepository",
+        ":omui-glance:publishAllPublicationsToCentralRepoRepository",
     )
 }
 

@@ -17,6 +17,7 @@ composeBom = "2026.06.01"
 # 发布出去的 POM / module metadata 里依赖必须带具体版本，否则宿主解析不到 ——
 # 所以这里显式声明，而不是只靠 BOM 的约束。
 compose = "1.11.4"
+glance = "1.1.1"
 activityCompose = "1.13.0"
 
 # 只测纯逻辑（对比度计算、栅格列宽），不引入 Robolectric
@@ -34,6 +35,7 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 androidx-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "compose" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "compose" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "compose" }
+androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "glance" }
 
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 
