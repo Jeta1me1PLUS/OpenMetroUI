@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,8 @@ fun OmChipInput(
     modifier: Modifier = Modifier,
     placeholder: String? = null,
     enabled: Boolean = true,
+    /** 输入与占位符字阶，默认 `bodyM`。 */
+    textStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val spacing = OmTheme.spacing
@@ -80,7 +83,7 @@ fun OmChipInput(
                 if (input.isEmpty()) {
                     OmText(
                         text = placeholder ?: strings.chipInputPlaceholder,
-                        style = typography.bodyM,
+                        style = textStyle ?: typography.bodyM,
                         color = if (enabled) colors.textSecondary else colors.textDisabled,
                         maxLines = 1,
                     )

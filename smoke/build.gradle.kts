@@ -43,5 +43,6 @@ android {
 dependencies {
     // 关键：Maven 坐标，不是 project 依赖
     implementation("io.github.jeta1me1plus:omui-components:${providers.gradleProperty("OM_VERSION").get()}")
+    implementation("io.github.jeta1me1plus:omui-glance:${providers.gradleProperty("OM_VERSION").get()}")
     implementation(libs.androidx.activity.compose)
 }

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
@@ -66,6 +67,8 @@ fun OmButton(
     leadingIcon: ImageVector? = null,
     trailingIcon: ImageVector? = null,
     fillWidth: Boolean = false,
+    /** 按钮文字的字阶，默认按 [size] 推断。 */
+    textStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val spacing = OmTheme.spacing
@@ -102,7 +105,7 @@ fun OmButton(
     val resolvedContent = if (enabled) contentColor else contentColor.copy(alpha = 0.38f)
     val resolvedBorder = if (enabled) colors.lineStrong else colors.lineStrong.copy(alpha = 0.38f)
 
-    val buttonTextStyle = OmTheme.typography.bodyM.copy(
+    val buttonTextStyle = textStyle ?: OmTheme.typography.bodyM.copy(
         fontWeight = FontWeight.SemiBold,
         letterSpacing = 0.5.sp,
     )

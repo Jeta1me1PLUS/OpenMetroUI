@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -37,6 +38,8 @@ fun OmRail(
     selectedIndex: Int,
     onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    /** 文字字阶，默认 `label`。 */
+    labelStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val rtl = rememberIsRtl()
@@ -79,7 +82,7 @@ fun OmRail(
                 Spacer(Modifier.height(spacing.space1))
                 OmText(
                     text = item.label,
-                    style = typography.label,
+                    style = labelStyle ?: typography.label,
                     color = if (selected) colors.textPrimary else colors.textSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

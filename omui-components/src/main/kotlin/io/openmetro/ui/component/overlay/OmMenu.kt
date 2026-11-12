@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -80,6 +81,8 @@ fun OmMenuItem(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     destructive: Boolean = false,
+    /** 条目字阶，默认 `bodyM`。 */
+    textStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val spacing = OmTheme.spacing
@@ -101,7 +104,7 @@ fun OmMenuItem(
     ) {
         OmText(
             text = text,
-            style = typography.bodyM,
+            style = textStyle ?: typography.bodyM,
             color = when {
                 !enabled -> colors.textDisabled
                 destructive -> colors.danger

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -44,6 +45,8 @@ fun OmTag(
     selected: Boolean = false,
     onClick: (() -> Unit)? = null,
     onRemove: (() -> Unit)? = null,
+    /** 标签文字的字阶，默认 `caption`。 */
+    textStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val spacing = OmTheme.spacing
@@ -90,7 +93,7 @@ fun OmTag(
     ) {
         OmText(
             text = text,
-            style = OmTheme.typography.caption,
+            style = textStyle ?: OmTheme.typography.caption,
             color = contentColor,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,

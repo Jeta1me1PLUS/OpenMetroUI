@@ -2,6 +2,24 @@
 
 按版本倒序，只列改了什么。
 
+## v0.20.0 · 2026-11-12
+
+所有承载用户文案的组件都开放了字阶参数。
+
+### 新增
+
+- 24 个组件加上了 `TextStyle?` 形式的字阶参数，默认全部为 `null`（回退 token），不传时行为完全不变。命名按语义：`titleStyle` / `subtitleStyle` / `labelStyle` / `textStyle` / `valueStyle` / `optionStyle` / `tabStyle` / `dayStyle`。
+- `OmTile` 新增 `backTitleStyle`（不传时回退 `titleStyle`）与 `labelStyle`。
+
+### 修复
+
+- **`OmTile` 的背面不接受字阶参数**：`titleStyle` 之前只喂给正面，背面永远按尺寸推断，两面想用不同字号做不到。
+
+### 踩到并修正的两条 Compose 规范
+
+- 带尾随 lambda 的组件，样式参数必须放在 lambda **之前**，否则 lambda 会被当作 `TextStyle` 传进去（`OmEmptyState` / `OmErrorState` 出了这个编译错误）。
+- `modifier` 必须是**第一个可选参数**（`OmDialog` / `OmRail` 一开始把样式参数插在了它前面，被 lint 抓出来）。
+
 ## v0.19.0 · 2026-11-10
 
 小组件的三块补全：磁贴组、配置页、定时刷新。

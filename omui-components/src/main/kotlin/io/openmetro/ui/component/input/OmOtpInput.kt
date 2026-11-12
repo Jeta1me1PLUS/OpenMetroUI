@@ -16,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
@@ -39,6 +40,8 @@ fun OmOtpInput(
     modifier: Modifier = Modifier,
     length: Int = 6,
     enabled: Boolean = true,
+    /** 数字字阶，默认 `title`。 */
+    digitStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val shapes = OmTheme.shapes
@@ -75,7 +78,7 @@ fun OmOtpInput(
                 ) {
                     OmText(
                         text = value.getOrNull(index)?.toString().orEmpty(),
-                        style = typography.title,
+                        style = digitStyle ?: typography.title,
                         color = if (enabled) colors.textPrimary else colors.textDisabled,
                         maxLines = 1,
                     )

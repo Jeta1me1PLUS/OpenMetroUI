@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -58,6 +59,10 @@ fun OmTextField(
     helperText: String? = null,
     errorText: String? = null,
     enabled: Boolean = true,
+    /** 浮动标签字阶，默认 `label`。 */
+    labelStyle: TextStyle? = null,
+    /** 辅助文本字阶，默认 `caption`。 */
+    helperStyle: TextStyle? = null,
     singleLine: Boolean = true,
     minLines: Int = 1,
     variant: OmTextFieldVariant = OmTextFieldVariant.Underline,
@@ -111,7 +116,7 @@ fun OmTextField(
         decorationBox = { innerTextField ->
             Column(Modifier.fillMaxWidth()) {
                 if (label != null) {
-                    OmText(label, style = typography.label, color = colors.textSecondary)
+                    OmText(label, style = labelStyle ?: typography.label, color = colors.textSecondary)
                     Spacer(Modifier.height(spacing.space2))
                 }
 
@@ -200,7 +205,7 @@ fun OmTextField(
                     Spacer(Modifier.height(spacing.space2))
                     OmText(
                         text = message,
-                        style = typography.caption,
+                        style = helperStyle ?: typography.caption,
                         color = if (isError) colors.danger else colors.textSecondary,
                     )
                 }

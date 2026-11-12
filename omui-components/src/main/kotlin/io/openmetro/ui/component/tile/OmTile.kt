@@ -64,6 +64,10 @@ fun OmTile(
     color: OmTileColor? = null,
     backTitle: String? = null,
     titleStyle: TextStyle? = null,
+    /** 背面标题的字阶。不传时沿用 [titleStyle]，再退回按尺寸推断。 */
+    backTitleStyle: TextStyle? = null,
+    /** 左上角小标签的字阶，默认 `label`。 */
+    labelStyle: TextStyle? = null,
     rotatingTitles: List<String> = emptyList(),
     rotateIntervalMillis: Long = 8000,
     onClick: (() -> Unit)? = null,
@@ -117,11 +121,22 @@ fun OmTile(
             },
     ) {
         if (rotation <= 90f) {
-            TileFace(title = faceTitle, label = label, color = tileColor, titleStyle = titleStyle)
+            TileFace(
+                title = faceTitle,
+                label = label,
+                color = tileColor,
+                titleStyle = titleStyle,
+                labelStyle = labelStyle,
+            )
         } else {
             // 背面再转 180°，否则文字是镜像的
             Box(Modifier.fillMaxSize().graphicsLayer { rotationY = 180f }) {
-                TileFace(title = backTitle.orEmpty(), label = null, color = tileColor)
+                TileFace(
+                    title = backTitle.orEmpty(),
+                    label = null,
+                    color = tileColor,
+                    titleStyle = backTitleStyle ?: titleStyle,
+                )
             }
         }
     }
@@ -133,6 +148,7 @@ private fun TileFace(
     label: String?,
     color: OmTileColor,
     titleStyle: TextStyle? = null,
+    labelStyle: TextStyle? = null,
 ) {
     val typography = OmTheme.typography
     val spacing = OmTheme.spacing
@@ -149,7 +165,7 @@ private fun TileFace(
 
         Column {
             if (label != null) {
-                OmText(label, style = typography.label, color = color.onSurface)
+                OmText(label, style = labelStyle ?: typography.label, color = color.onSurface)
                 Spacer(Modifier.height(spacing.space1))
             }
             OmText(

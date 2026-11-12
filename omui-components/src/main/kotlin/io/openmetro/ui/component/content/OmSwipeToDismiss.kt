@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.CustomAccessibilityAction
@@ -43,6 +44,8 @@ import kotlin.math.roundToInt
 fun OmSwipeToDismiss(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
+    /** 动作文字字阶，默认 `label`。 */
+    actionStyle: TextStyle? = null,
     content: @Composable () -> Unit,
 ) {
     val colors = OmTheme.colors
@@ -67,7 +70,7 @@ fun OmSwipeToDismiss(
             ) {
                 OmText(
                     text = LocalOmStrings.current.delete,
-                    style = OmTheme.typography.label,
+                    style = actionStyle ?: OmTheme.typography.label,
                     color = Color.White,
                     maxLines = 1,
                 )

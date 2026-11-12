@@ -18,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.draw.drawBehind
@@ -49,6 +50,8 @@ fun OmPivot(
     modifier: Modifier = Modifier,
     scrollable: Boolean = false,
     pagerState: PagerState? = null,
+    /** 页签字阶，默认 `title`。 */
+    tabStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val spacing = OmTheme.spacing
@@ -103,7 +106,7 @@ fun OmPivot(
             ) {
                 OmText(
                     text = tab,
-                    style = typography.title,
+                    style = tabStyle ?: typography.title,
                     color = if (selected) colors.textPrimary else colors.textSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,

@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.style.TextOverflow
@@ -40,6 +41,10 @@ fun OmTable(
     rows: List<List<String>>,
     modifier: Modifier = Modifier,
     onRowClick: ((Int) -> Unit)? = null,
+    /** 表头字阶，默认 `caption`。 */
+    headerStyle: TextStyle? = null,
+    /** 单元格字阶，默认 `bodyM`。 */
+    cellStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val spacing = OmTheme.spacing
@@ -69,7 +74,7 @@ fun OmTable(
                 ) {
                     OmText(
                         text = column.title,
-                        style = typography.caption,
+                        style = headerStyle ?: typography.caption,
                         color = colors.textSecondary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
@@ -117,7 +122,7 @@ fun OmTable(
                     ) {
                         OmText(
                             text = row.getOrElse(columnIndex) { "" },
-                            style = typography.bodyM,
+                            style = cellStyle ?: typography.bodyM,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )

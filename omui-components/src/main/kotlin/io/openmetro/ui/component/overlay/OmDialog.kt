@@ -26,6 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.IntOffset
@@ -51,6 +52,8 @@ fun OmDialog(
     onDismiss: () -> Unit,
     title: String,
     modifier: Modifier = Modifier,
+    /** 标题字阶，默认 `headline`。 */
+    titleStyle: TextStyle? = null,
     actions: (@Composable RowScope.() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
@@ -101,7 +104,7 @@ fun OmDialog(
                     .pointerInput(Unit) { detectTapGestures { } }
                     .padding(spacing.space6),
             ) {
-                OmText(title, style = OmTheme.typography.headline)
+                OmText(title, style = titleStyle ?: OmTheme.typography.headline)
                 Spacer(Modifier.height(spacing.space4))
                 content()
 

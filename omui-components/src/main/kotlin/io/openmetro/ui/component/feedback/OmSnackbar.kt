@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -44,6 +45,10 @@ fun OmSnackbar(
     modifier: Modifier = Modifier,
     actionLabel: String? = null,
     onAction: (() -> Unit)? = null,
+    /** 正文字阶，默认 `bodyM`。 */
+    textStyle: TextStyle? = null,
+    /** 动作字阶，默认 `label`。 */
+    actionStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val rtl = rememberIsRtl()
@@ -85,7 +90,7 @@ fun OmSnackbar(
     ) {
         OmText(
             text = message,
-            style = typography.bodyM,
+            style = textStyle ?: typography.bodyM,
             color = colors.onInverse,
             modifier = Modifier.weight(1f),
             maxLines = 2,
@@ -101,7 +106,7 @@ fun OmSnackbar(
             ) {
                 OmText(
                     text = actionLabel,
-                    style = typography.label,
+                    style = actionStyle ?: typography.label,
                     color = colors.onInverse,
                     maxLines = 1,
                 )

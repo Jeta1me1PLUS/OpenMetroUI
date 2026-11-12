@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
@@ -48,6 +49,10 @@ fun OmAccordion(
     modifier: Modifier = Modifier,
     subtitle: String? = null,
     initiallyExpanded: Boolean = false,
+    /** 标题字阶，默认 `title`。 */
+    titleStyle: TextStyle? = null,
+    /** 副标题字阶，默认 `bodyM`。 */
+    subtitleStyle: TextStyle? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val colors = OmTheme.colors
@@ -76,7 +81,7 @@ fun OmAccordion(
             Column(Modifier.weight(1f)) {
                 OmText(
                     text = title,
-                    style = typography.title,
+                    style = titleStyle ?: typography.title,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
@@ -84,7 +89,7 @@ fun OmAccordion(
                     Spacer(Modifier.height(spacing.space1))
                     OmText(
                         text = subtitle,
-                        style = typography.bodyM,
+                        style = subtitleStyle ?: typography.bodyM,
                         color = colors.textSecondary,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,

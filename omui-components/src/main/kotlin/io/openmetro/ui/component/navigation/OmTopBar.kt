@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -41,6 +42,10 @@ fun OmTopBar(
     backIcon: ImageVector = OmIcons.ArrowBack,
     backContentDescription: String? = null,
     actions: @Composable RowScope.() -> Unit = {},
+    /** 标题字阶，默认按 [large] 在 `displayL` / `title` 之间选。 */
+    titleStyle: TextStyle? = null,
+    /** 上方小标签字阶，默认 `label`。 */
+    labelStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val spacing = OmTheme.spacing
@@ -63,12 +68,12 @@ fun OmTopBar(
 
         Column(Modifier.weight(1f)) {
             if (label != null) {
-                OmText(label, style = typography.label, color = colors.textSecondary)
+                OmText(label, style = labelStyle ?: typography.label, color = colors.textSecondary)
                 Spacer(Modifier.height(spacing.space1))
             }
             OmText(
                 text = title,
-                style = if (large) typography.displayL else typography.title,
+                style = titleStyle ?: if (large) typography.displayL else typography.title,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )

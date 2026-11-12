@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.core.theme.OmTheme
 
@@ -23,6 +24,8 @@ import io.openmetro.ui.core.theme.OmTheme
 fun OmListSection(
     title: String,
     modifier: Modifier = Modifier,
+    /** 分组标题字阶，默认 `caption`。 */
+    titleStyle: TextStyle? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val colors = OmTheme.colors
@@ -32,7 +35,7 @@ fun OmListSection(
     Column(modifier = modifier.fillMaxWidth()) {
         OmText(
             text = title.uppercase(),
-            style = typography.caption,
+            style = titleStyle ?: typography.caption,
             color = colors.textSecondary,
             modifier = Modifier.padding(bottom = spacing.space2),
             maxLines = 1,

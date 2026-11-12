@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -39,6 +40,10 @@ data class OmTimelineItem(
 fun OmTimeline(
     items: List<OmTimelineItem>,
     modifier: Modifier = Modifier,
+    /** 条目标题字阶，默认 `subtitle`。 */
+    titleStyle: TextStyle? = null,
+    /** 时间与描述字阶，默认 `caption` / `bodyM`。 */
+    metaStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val spacing = OmTheme.spacing
@@ -97,12 +102,12 @@ fun OmTimeline(
                             bottom = if (isLast) spacing.space2 else spacing.space6,
                         ),
                 ) {
-                    OmText(item.title, style = typography.subtitle, maxLines = 2)
+                    OmText(item.title, style = titleStyle ?: typography.subtitle, maxLines = 2)
                     if (item.time != null) {
                         Spacer(Modifier.height(spacing.space1))
                         OmText(
                             text = item.time,
-                            style = typography.caption,
+                            style = metaStyle ?: typography.caption,
                             color = colors.textSecondary,
                             maxLines = 1,
                         )
@@ -111,7 +116,7 @@ fun OmTimeline(
                         Spacer(Modifier.height(spacing.space1))
                         OmText(
                             text = item.description,
-                            style = typography.bodyM,
+                            style = metaStyle ?: typography.bodyM,
                             color = colors.textSecondary,
                         )
                     }

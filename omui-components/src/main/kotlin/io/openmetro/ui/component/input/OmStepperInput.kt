@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -40,6 +41,8 @@ fun OmStepperInput(
     max: Int = Int.MAX_VALUE,
     step: Int = 1,
     enabled: Boolean = true,
+    /** 数字字阶，默认 `title`。 */
+    valueStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val shapes = OmTheme.shapes
@@ -76,7 +79,7 @@ fun OmStepperInput(
         ) {
             OmText(
                 text = value.toString(),
-                style = typography.title,
+                style = valueStyle ?: typography.title,
                 color = if (enabled) colors.textPrimary else colors.textDisabled,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

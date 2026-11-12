@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import io.openmetro.ui.core.theme.OmTheme
 
 /**
@@ -21,6 +22,10 @@ fun OmSection(
     modifier: Modifier = Modifier,
     label: String? = null,
     title: String? = null,
+    /** 分组标签字阶，默认 `label`。 */
+    labelStyle: TextStyle? = null,
+    /** 标题字阶，默认 `displayM`。 */
+    titleStyle: TextStyle? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val spacing = OmTheme.spacing
@@ -30,11 +35,11 @@ fun OmSection(
     Column(modifier = modifier) {
         Spacer(Modifier.height(spacing.space8))
         if (label != null) {
-            OmText(label, style = typography.label, color = colors.textSecondary)
+            OmText(label, style = labelStyle ?: typography.label, color = colors.textSecondary)
             Spacer(Modifier.height(spacing.space2))
         }
         if (title != null) {
-            OmText(title, style = typography.displayM)
+            OmText(title, style = titleStyle ?: typography.displayM)
             Spacer(Modifier.height(spacing.space3))
         }
         content()

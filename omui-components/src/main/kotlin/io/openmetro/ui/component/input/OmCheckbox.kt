@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Path
@@ -37,6 +38,8 @@ fun OmCheckbox(
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     label: String? = null,
+    /** 标签字阶，默认 `bodyL`。 */
+    labelStyle: TextStyle? = null,
     enabled: Boolean = true,
 ) {
     val colors = OmTheme.colors
@@ -90,7 +93,7 @@ fun OmCheckbox(
             Spacer(Modifier.width(spacing.space3))
             OmText(
                 text = label,
-                style = OmTheme.typography.bodyL,
+                style = labelStyle ?: OmTheme.typography.bodyL,
                 color = if (enabled) colors.textPrimary else colors.textDisabled,
             )
         }

@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.semantics.Role
@@ -46,6 +47,12 @@ fun OmDatePicker(
     selected: OmDate?,
     onSelect: (OmDate) -> Unit,
     modifier: Modifier = Modifier,
+    /** 月份标题字阶，默认 `title`。 */
+    monthStyle: TextStyle? = null,
+    /** 星期缩写字阶，默认 `caption`。 */
+    weekdayStyle: TextStyle? = null,
+    /** 日期数字字阶，默认 `bodyM`。 */
+    dayStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val spacing = OmTheme.spacing
@@ -83,7 +90,7 @@ fun OmDatePicker(
                 val monthName = strings.monthNames.getOrElse(month - 1) { month.toString() }
                 OmText(
                     text = String.format(strings.yearMonthFormat, year.toString(), monthName),
-                    style = typography.title,
+                    style = monthStyle ?: typography.title,
                 )
             }
             OmIconButton(
@@ -109,7 +116,7 @@ fun OmDatePicker(
                 ) {
                     OmText(
                         text = label,
-                        style = typography.caption,
+                        style = weekdayStyle ?: typography.caption,
                         color = colors.textSecondary,
                         maxLines = 1,
                     )
@@ -152,7 +159,7 @@ fun OmDatePicker(
                             ) {
                                 OmText(
                                     text = day.toString(),
-                                    style = typography.bodyM,
+                                    style = dayStyle ?: typography.bodyM,
                                     color = if (isSelected) colors.onAccent else colors.textPrimary,
                                     maxLines = 1,
                                 )

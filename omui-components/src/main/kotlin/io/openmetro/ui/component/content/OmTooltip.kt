@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.core.theme.OmTheme
@@ -19,6 +20,8 @@ import io.openmetro.ui.core.theme.OmTheme
 fun OmTooltip(
     text: String,
     modifier: Modifier = Modifier,
+    /** 文字字阶，默认 `bodyM`。 */
+    textStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val spacing = OmTheme.spacing
@@ -30,7 +33,7 @@ fun OmTooltip(
     ) {
         OmText(
             text = text,
-            style = OmTheme.typography.bodyM,
+            style = textStyle ?: OmTheme.typography.bodyM,
             color = colors.onInverse,
             maxLines = 3,
             overflow = TextOverflow.Ellipsis,

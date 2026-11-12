@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -70,6 +71,10 @@ fun OmListItem(
     selected: Boolean = false,
     enabled: Boolean = true,
     onClick: (() -> Unit)? = null,
+    /** 标题字阶，默认 `title`。 */
+    titleStyle: TextStyle? = null,
+    /** 副标题字阶，默认 `bodyM`。 */
+    subtitleStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val rtl = rememberIsRtl()
@@ -113,7 +118,7 @@ fun OmListItem(
         Column(Modifier.weight(1f)) {
             OmText(
                 text = title,
-                style = typography.title,
+                style = titleStyle ?: typography.title,
                 color = if (enabled) colors.textPrimary else colors.textDisabled,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
@@ -122,7 +127,7 @@ fun OmListItem(
                 Spacer(Modifier.height(spacing.space1))
                 OmText(
                     text = subtitle,
-                    style = typography.bodyM,
+                    style = subtitleStyle ?: typography.bodyM,
                     color = colors.textSecondary,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,

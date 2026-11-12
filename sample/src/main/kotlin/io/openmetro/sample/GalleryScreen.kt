@@ -426,6 +426,9 @@ fun GalleryScreen() {
                 modifier = Modifier.omGridSpan(2).aspectRatio(1f),
                 tone = OmTileTone.Paper,
                 backTitle = "今天 2 个日程",
+                // 背面单独压小字阶：背面文案通常更长，需要不同层级
+                backTitleStyle = typography.bodyL,
+                labelStyle = typography.caption,
             )
             OmTile(
                 title = "音乐",

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import io.openmetro.ui.component.base.OmText
 import io.openmetro.ui.core.theme.OmTheme
@@ -20,6 +21,8 @@ import io.openmetro.ui.core.theme.OmTheme
 @Composable
 fun OmBadge(
     modifier: Modifier = Modifier,
+    /** 数字字阶，默认 `caption`。 */
+    textStyle: TextStyle? = null,
     text: String? = null,
 ) {
     val colors = OmTheme.colors
@@ -38,7 +41,7 @@ fun OmBadge(
     ) {
         OmText(
             text = text,
-            style = OmTheme.typography.caption,
+            style = textStyle ?: OmTheme.typography.caption,
             color = colors.onAccent,
             maxLines = 1,
         )

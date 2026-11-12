@@ -1,5 +1,23 @@
 # 迁移指南
 
+## v0.20.0
+
+### 兼容性说明
+
+新增的字阶参数全部是可选的 `TextStyle?`，不传时行为不变，**现有调用不需要改**。
+
+唯一的例外：`OmEmptyState` / `OmErrorState` 因为插入了两个样式参数，`action` 从第 4 个位置参数变成了第 5 个。用尾随 lambda 传 `action` 的调用不受影响（这也是推荐写法）：
+
+```kotlin
+OmEmptyState(title = "空", description = "…") {
+    OmButton("新建", onClick = {})
+}
+```
+
+如果把 `action` 当位置参数传，需要改成命名参数。
+
+---
+
 ## v0.17.2
 
 ### 破坏性变更

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -35,6 +36,8 @@ fun OmSegmentedControl(
     onSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    /** 选项字阶，默认 `label`。 */
+    optionStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val shapes = OmTheme.shapes
@@ -84,7 +87,7 @@ fun OmSegmentedControl(
             ) {
                 OmText(
                     text = label,
-                    style = typography.label,
+                    style = optionStyle ?: typography.label,
                     color = when {
                         !enabled -> colors.textDisabled
                         selected -> colors.onAccent

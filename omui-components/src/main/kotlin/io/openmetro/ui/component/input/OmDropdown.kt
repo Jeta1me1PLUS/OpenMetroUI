@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -55,6 +56,8 @@ fun OmDropdown(
     modifier: Modifier = Modifier,
     placeholder: String? = null,
     enabled: Boolean = true,
+    /** 触发区与选项的字阶，默认 `bodyL`。 */
+    optionStyle: TextStyle? = null,
 ) {
     val colors = OmTheme.colors
     val rtl = rememberIsRtl()
@@ -89,7 +92,7 @@ fun OmDropdown(
         ) {
             OmText(
                 text = if (hasSelection) options[selectedIndex] else (placeholder ?: strings.selectPlaceholder),
-                style = typography.bodyL,
+                style = optionStyle ?: typography.bodyL,
                 color = when {
                     !enabled -> colors.textDisabled
                     hasSelection -> colors.textPrimary
@@ -151,7 +154,7 @@ fun OmDropdown(
                         ) {
                             OmText(
                                 text = option,
-                                style = typography.bodyL,
+                                style = optionStyle ?: typography.bodyL,
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
                             )

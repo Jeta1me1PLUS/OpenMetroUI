@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -27,6 +28,11 @@ fun OmErrorState(
     title: String,
     modifier: Modifier = Modifier,
     description: String? = null,
+    /** 标题字阶，默认 `displayM`。 */
+    titleStyle: TextStyle? = null,
+    /** 描述字阶，默认 `bodyM`。 */
+    descriptionStyle: TextStyle? = null,
+    // action 必须留在最后：调用方用尾随 lambda 传它
     action: (@Composable () -> Unit)? = null,
 ) {
     val colors = OmTheme.colors
@@ -39,13 +45,13 @@ fun OmErrorState(
     ) {
         ErrorGlyph()
         Spacer(Modifier.height(spacing.space6))
-        OmText(title, style = typography.displayM)
+        OmText(title, style = titleStyle ?: typography.displayM)
 
         if (description != null) {
             Spacer(Modifier.height(spacing.space2))
             OmText(
                 text = description,
-                style = typography.bodyM,
+                style = descriptionStyle ?: typography.bodyM,
                 color = colors.textSecondary,
             )
         }
